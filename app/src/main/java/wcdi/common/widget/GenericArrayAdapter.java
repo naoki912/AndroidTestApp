@@ -1,4 +1,4 @@
-package wcdi.wcdiplayer.widget;
+package wcdi.common.widget;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,17 +16,24 @@ import java.util.List;
 public class GenericArrayAdapter<T> extends BaseAdapter {
 
     private Context mContext;
+
     private int mResource;
+
     private List<T> mObjects;
+
     private final Object mLock;
+
     private LayoutInflater mLayoutInflater;
 
     public GenericArrayAdapter(Context context, int resource, List<T> objects) {
         mContext = context;
+
         mResource = resource;
+
         mObjects = objects;
 
         mLock = new Object();
+
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -68,6 +75,7 @@ public class GenericArrayAdapter<T> extends BaseAdapter {
         synchronized (mLock) {
             mObjects.add(object);
         }
+
         notifyDataSetChanged();
     }
 
@@ -75,6 +83,7 @@ public class GenericArrayAdapter<T> extends BaseAdapter {
         synchronized (mLock) {
             mObjects.addAll(objects);
         }
+
         notifyDataSetChanged();
     }
 
@@ -82,6 +91,7 @@ public class GenericArrayAdapter<T> extends BaseAdapter {
         synchronized (mLock) {
             Collections.addAll(mObjects, items);
         }
+
         notifyDataSetChanged();
     }
 
@@ -89,6 +99,7 @@ public class GenericArrayAdapter<T> extends BaseAdapter {
         synchronized (mLock) {
             mObjects.remove(object);
         }
+
         notifyDataSetChanged();
     }
 
@@ -96,6 +107,7 @@ public class GenericArrayAdapter<T> extends BaseAdapter {
         synchronized (mLock) {
             mObjects.clear();
         }
+
         notifyDataSetChanged();
     }
 
