@@ -36,6 +36,5 @@ public class PlayingFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_playing, container, false);
     }
-    //test
 
 }
