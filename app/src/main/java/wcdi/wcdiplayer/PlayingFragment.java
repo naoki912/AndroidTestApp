@@ -37,5 +37,4 @@ public class PlayingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_playing, container, false);
     }
 
-
 }
