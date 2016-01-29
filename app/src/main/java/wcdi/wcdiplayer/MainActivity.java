@@ -1,5 +1,8 @@
 package wcdi.wcdiplayer;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FragmentManager fragmentManager = getFragmentManager();
+    private FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    private Fragment playingFragment = new PlayingFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        fragmentTransaction.replace(R.id.fragment, playingFragment);
+//        fragmentTransaction.add(R.id.fragment, playingFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
