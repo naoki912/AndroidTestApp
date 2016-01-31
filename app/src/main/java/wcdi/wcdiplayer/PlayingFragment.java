@@ -76,6 +76,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         pause_b.setOnClickListener(this);
         prev_b.setOnClickListener(this);
         next_b.setOnClickListener(this);
+        ArtworkSet();
 
         return view;
     }
@@ -127,16 +128,6 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-        artwork = mediametadataretriever.getEmbeddedPicture();
-        if(artwork == null){
-            Log.d("picture","null");
-        }else {
-            try {
-                artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         Log.d(String.valueOf(play_number), file_list[play_number]);
     }
 
@@ -148,6 +139,20 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         }else{
             if(play_number <= 0)play_number = file_list.length - 1;
             else{--play_number;}
+        }
+        ArtworkSet();
+    }
+
+    public void ArtworkSet(){
+        artwork = mediametadataretriever.getEmbeddedPicture();
+        if(artwork == null){
+            Log.d("picture","null");
+        }else {
+            try {
+                artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
