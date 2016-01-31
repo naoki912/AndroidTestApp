@@ -3,6 +3,7 @@ package wcdi.wcdiplayer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
     public AlbumFragment() {
     }
+
+    private OnAlbumFileClickListener mListner;
 
     private File path;
 
@@ -77,6 +80,12 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        try {
+            mListner = (OnAlbumFileClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+        }
     }
 
     @Override
@@ -89,8 +98,10 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
         // ToDo 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
         // itemにpathを保存しておく変数か何かを追加する
-        TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
-        path = new File(path.toString() + "/" + directoryName.getText().toString());
+//        TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
+//        path = new File(path.toString() + "/" + directoryName.getText().toString());
+
+        path = new File(parent.getAdapter().getItem(position).toString());
 
         if (path.isDirectory()) {
             getFragmentManager()
@@ -108,14 +119,20 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 //            for (File f : path.getParentFile().listFiles()) {
 //                stringList.add(f.toString());
 //            }
-            getFragmentManager()
-                    .beginTransaction()
-//                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
-                    .replace(R.id.fragment, PlayingFragment.newInstance(path.getParentFile(), null))
-                    .addToBackStack(null)
-                    .commit();
+
+//            getFragmentManager()
+//                    .beginTransaction()
+////                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
+//                    .replace(R.id.fragment, PlayingFragment.newInstance(path.getParentFile(), null))
+//                    .addToBackStack(null)
+//                    .commit();
+            mListner.onAlbumFileClick(path.getParentFile().toString());
         }
 
+    }
+
+    public interface OnAlbumFileClickListener {
+        public void onAlbumFileClick(String string);
     }
 
 }

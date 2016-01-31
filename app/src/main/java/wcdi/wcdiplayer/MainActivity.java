@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import java.io.File;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AlbumFragment.OnAlbumFileClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,4 +66,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onAlbumFileClick(String string) {
+        getFragmentManager()
+                .beginTransaction()
+//                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
+                .replace(R.id.fragment, PlayingFragment.newInstance(new File(string), null))
+                .addToBackStack(null)
+                .commit();
+    }
 }
