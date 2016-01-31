@@ -1,5 +1,7 @@
 package wcdi.wcdiplayer;
 
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +18,15 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlayingFragment extends Fragment implements View.OnClickListener{
-    private String dir_path;
-    private File dir;
-    private String[] file_list;
     private int play_number = 0;
-    private MediaPlayer mediaplayer;
+    private String dir_path,full_path;
+    private byte[] artwork;
+    private String[] file_list;
+    private File dir;
+    private ImageView artwork_v;
     private ImageButton pause_b,prev_b,next_b;
+    private MediaPlayer mediaplayer;
+    private MediaMetadataRetriever mediametadataretriever;
 
     public static PlayingFragment newInstance(File param1, String param2) {
         PlayingFragment fragment = new PlayingFragment();
@@ -54,6 +60,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         if (getArguments() != null) {
         }
         mediaplayer = new MediaPlayer();
+        mediametadataretriever = new MediaMetadataRetriever();
         MusicStart();
     }
 
@@ -64,6 +71,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         pause_b = (ImageButton)view.findViewById(R.id.pause_button);
         prev_b = (ImageButton)view.findViewById(R.id.prev_button);
         next_b = (ImageButton)view.findViewById(R.id.next_button);
+        artwork_v = (ImageView)view.findViewById(R.id.artwark_view);
 
         pause_b.setOnClickListener(this);
         prev_b.setOnClickListener(this);
@@ -101,8 +109,10 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     }
 
     public void MusicStart(){
+        full_path = dir_path + file_list[play_number];
+        mediametadataretriever.setDataSource(full_path);
         try {
-            mediaplayer.setDataSource(dir_path + file_list[play_number]);
+            mediaplayer.setDataSource(full_path);
             mediaplayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,6 +126,17 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
                 MusicStart();
             }
         });
+
+        artwork = mediametadataretriever.getEmbeddedPicture();
+        if(artwork == null){
+            Log.d("picture","null");
+        }else {
+            try {
+                artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Log.d(String.valueOf(play_number), file_list[play_number]);
     }
 
