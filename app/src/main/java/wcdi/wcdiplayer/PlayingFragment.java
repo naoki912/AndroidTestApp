@@ -127,7 +127,6 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
                 MusicStart();
             }
         });
-
         Log.d(String.valueOf(play_number), file_list[play_number]);
     }
 
@@ -140,19 +139,17 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             if(play_number <= 0)play_number = file_list.length - 1;
             else{--play_number;}
         }
+        full_path = dir_path + file_list[play_number];
         ArtworkSet();
     }
 
     public void ArtworkSet(){
+        full_path = dir_path + file_list[play_number];
         artwork = mediametadataretriever.getEmbeddedPicture();
         if(artwork == null){
             Log.d("picture","null");
         }else {
-            try {
-                artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
         }
     }
 }
