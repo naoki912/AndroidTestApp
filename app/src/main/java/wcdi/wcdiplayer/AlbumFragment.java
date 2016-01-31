@@ -87,8 +87,10 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        // ToDo 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
+        // itemにpathを保存しておく変数か何かを追加する
         TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
-        path = new File(directoryName.getText().toString());
+        path = new File(path.toString() + "/" + directoryName.getText().toString());
 
         if (path.isDirectory()) {
             getFragmentManager()
@@ -98,6 +100,8 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
                     .commit();
         } else {
             // ここでListを作成する処理を実装し、Activity経由でPlayingServiceへListを渡す
+            // コールバックインターフェイスを定義して、イベントをActivity側に飛ばして
+            // Activity側でPlayingFragmentを生成する
 
 //            List<String> stringList = null;
             // とりあえず音楽ファイルかの判定は後で考える
@@ -111,6 +115,7 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
                     .addToBackStack(null)
                     .commit();
         }
+
     }
 
 }
