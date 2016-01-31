@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.List;
 
 import wcdi.common.widget.GenericArrayAdapter;
@@ -30,12 +29,9 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
     }
 
     @Override
-    public File getItem(int position) {
-        return super.getItem(position);
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        super.getView(position, convertView, parent);
 
         View view;
 
@@ -55,30 +51,4 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
         return view;
     }
 
-    @Override
-    public void addAll(Collection<? extends File> objects) {
-        synchronized (mLock) {
-            mObjects.addAll(objects);
-        }
-
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void remove(File object) {
-        synchronized (mLock) {
-            mObjects.remove(object);
-        }
-
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void clear() {
-        synchronized (mLock) {
-            mObjects.clear();
-        }
-
-        notifyDataSetChanged();
-    }
 }
