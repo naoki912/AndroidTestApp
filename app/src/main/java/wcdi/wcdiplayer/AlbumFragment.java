@@ -3,8 +3,6 @@ package wcdi.wcdiplayer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.List;
 
 import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
 
@@ -90,8 +87,10 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        // ToDo 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
+        // itemにpathを保存しておく変数か何かを追加する
         TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
-        path = new File(directoryName.getText().toString());
+        path = new File(path.toString() + "/" + directoryName.getText().toString());
 
         if (path.isDirectory()) {
             getFragmentManager()
@@ -101,6 +100,8 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
                     .commit();
         } else {
             // ここでListを作成する処理を実装し、Activity経由でPlayingServiceへListを渡す
+            // コールバックインターフェイスを定義して、イベントをActivity側に飛ばして
+            // Activity側でPlayingFragmentを生成する
 
 //            List<String> stringList = null;
             // とりあえず音楽ファイルかの判定は後で考える
@@ -110,11 +111,11 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
             getFragmentManager()
                     .beginTransaction()
 //                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
-//                    .replace(R.id.fragment, PlayingFragment.newInstance(null, null))
                     .replace(R.id.fragment, PlayingFragment.newInstance(path.getParentFile(), null))
                     .addToBackStack(null)
                     .commit();
         }
+
     }
 
 }

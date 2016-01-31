@@ -1,17 +1,14 @@
 package wcdi.wcdiplayer.widget;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import wcdi.common.widget.GenericArrayAdapter;
 import wcdi.wcdiplayer.R;
@@ -50,15 +47,12 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
 
         TextView textView = (TextView) view.findViewById(R.id.directoryName);
         try {
-//            textView.setText(getItem(position));
-            textView.setText(getItem(position).getPath());
+            textView.setText(getItem(position).getName());
         } catch (Exception e) {
-            textView.setText("except");
+            textView.setText("ファイル名が壊れています");
         }
 
         return view;
-//        return super.getView(position, convertView, parent);
-
     }
 
     @Override
@@ -68,8 +62,6 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
         }
 
         notifyDataSetChanged();
-
-//        super.addAll(objects);
     }
 
     @Override
@@ -79,8 +71,6 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
         }
 
         notifyDataSetChanged();
-
-//        super.remove(object);
     }
 
     @Override
@@ -90,7 +80,5 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
         }
 
         notifyDataSetChanged();
-
-//        super.clear();
     }
 }
