@@ -76,22 +76,22 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         Log.d("Test","Check");
         switch (view.getId()) {
             case R.id.pause_button:
-                if (mediaplayer.isPlaying()) {
+                if (mediaplayer.get(play_number).isPlaying()) {
                     Log.d(String.valueOf(play_number) + " : " + file_list[play_number],"pause");
-                    mediaplayer.pause();
+                    mediaplayer.get(play_number).pause();
                 } else {
                     Log.d(String.valueOf(play_number) + " : " + file_list[play_number],"start");
-                    mediaplayer.start();
+                    mediaplayer.get(play_number).start();
                 }
                 break;
             case R.id.prev_button:
-                mediaplayer.reset();
+                mediaplayer.get(play_number).reset();
                 if(play_number <= 0)play_number = file_list.length - 1;
                 else{--play_number;}
                 MusicStart();
                 break;
             case R.id.next_button:
-                mediaplayer.reset();
+                mediaplayer.get(play_number).reset();
                 if(play_number >= (file_list.length - 1))play_number = 0;
                 else{++play_number;}
                 MusicStart();
