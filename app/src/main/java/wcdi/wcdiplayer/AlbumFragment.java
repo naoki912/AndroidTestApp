@@ -10,6 +10,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
 
@@ -94,10 +95,12 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        // ToDo 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
+        // 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
         // itemにpathを保存しておく変数か何かを追加する
-//        TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
-//        path = new File(path.toString() + "/" + directoryName.getText().toString());
+        // TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
+        // path = new File(path.toString() + "/" + directoryName.getText().toString());
+        // ↓
+        // 変更済みだが、この方法で正しいのか分からない
 
         path = new File(parent.getAdapter().getItem(position).toString());
 
@@ -108,26 +111,25 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
                     .addToBackStack(null)
                     .commit();
         } else {
-//            List<String> stringList = null;
-            // とりあえず音楽ファイルかの判定は後で考える
-//            for (File f : path.getParentFile().listFiles()) {
-//                stringList.add(f.toString());
-//            }
 
-            // 以下の処理はすべてActivity側で行うように実装済み
-//            getFragmentManager()
-//                    .beginTransaction()
-////                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
-//                    .replace(R.id.fragment, PlayingFragment.newInstance(path.getParentFile(), null))
-//                    .addToBackStack(null)
-//                    .commit();
-            mListner.onAlbumFileClick(path.getParentFile().toString());
+            // PlayingFragment側のBundleには、再生ポイント(int)、List(Bundleの仕様上ArrayList)を渡す
+            // Bundleの仕様上ArrayListを使用
+            ArrayList<String> mediaPathList = new ArrayList<>();
+            for (File f: path.getParentFile().listFiles()) {
+                // ToDo if (音楽ファイルか判定)
+                // 音楽ファイルのみListにぶっこむ
+                // とりあえず音楽ファイルかの判定は後で考える
+                mediaPathList.add(f.getAbsolutePath());
+            }
+
+            mListner.onAlbumFileClick(mediaPathList, 0);
+
         }
 
     }
 
     public interface OnAlbumFileClickListener {
-        void onAlbumFileClick(String string);
+        void onAlbumFileClick(ArrayList<String> mediaPathList, int point);
     }
 
 }

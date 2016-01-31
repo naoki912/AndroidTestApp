@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements AlbumFragment.OnAlbumFileClickListener {
@@ -67,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
     }
 
     @Override
-    public void onAlbumFileClick(String string) {
+    public void onAlbumFileClick(ArrayList<String> mediaPathList, int point) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment, PlayingFragment.newInstance(new File(string), null))
+                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, point))
                 .addToBackStack(null)
                 .commit();
     }

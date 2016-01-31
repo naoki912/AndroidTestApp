@@ -15,11 +15,10 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlayingFragment extends Fragment implements View.OnClickListener{
-    private int play_number = 0;
+    private int play_number;
     private String dir_path,full_path,title;
     private byte[] artwork;
     private String[] file_list;
@@ -30,12 +29,15 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     private MediaPlayer mediaplayer;
     private MediaMetadataRetriever mediametadataretriever;
 
-    public static PlayingFragment newInstance(File param1, String param2) {
+    private ArrayList<String> mediaPathList;
+
+    public static PlayingFragment newInstance(ArrayList<String> mediaPathList, int point) {
         PlayingFragment fragment = new PlayingFragment();
 
         Bundle args = new Bundle();
 
-        args.putString("PATH", param1.toString());
+        args.putStringArrayList("media_list", mediaPathList);
+        args.putInt("point", point);
 
         fragment.setArguments(args);
 
@@ -44,11 +46,16 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void setArguments(Bundle args) {
-        dir_path = args.getString("PATH") + "/";
 
-        dir = new File(dir_path);
+        // newInstance List version
+        mediaPathList = args.getStringArrayList("media_list");
+        play_number = args.getInt("point");
 
-        file_list = dir.list();
+        // ファイルリストに音楽ファイルをすべてフルパスで保存してる
+        // 配列じゃなくてList使えよ
+        // file_listが配列じゃなくてListだとココらへんのキャストが無くて楽
+        file_list = mediaPathList.toArray(new String[mediaPathList.size()]);
+
     }
 
     public PlayingFragment() {
@@ -165,7 +172,10 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     }
 
     public void PathSet(){
-        full_path = dir_path + file_list[play_number];
+        // file_listに音楽ファイルをフルパスで保存したのでこの処理は要らない
+        // full_path変数を消してもおｋ
+        // full_path = dir_path + file_list[play_number];
+        full_path = file_list[play_number];
         mediametadataretriever.setDataSource(full_path);
     }
 }
