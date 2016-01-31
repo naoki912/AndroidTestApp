@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +20,11 @@ import java.util.ArrayList;
 
 public class PlayingFragment extends Fragment implements View.OnClickListener{
     private int play_number = 0;
-    private String dir_path,full_path;
+    private String dir_path,full_path,title;
     private byte[] artwork;
     private String[] file_list;
     private File dir;
+    private TextView title_v;
     private ImageView artwork_v;
     private ImageButton pause_b,prev_b,next_b;
     private MediaPlayer mediaplayer;
@@ -72,11 +74,14 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         pause_b = (ImageButton)view.findViewById(R.id.pause_button);
         prev_b = (ImageButton)view.findViewById(R.id.prev_button);
         next_b = (ImageButton)view.findViewById(R.id.next_button);
+        title_v = (TextView)view.findViewById(R.id.titleView);
         artwork_v = (ImageView)view.findViewById(R.id.artwark_view);
 
         pause_b.setOnClickListener(this);
         prev_b.setOnClickListener(this);
         next_b.setOnClickListener(this);
+
+        TextSet();
         ArtworkSet();
 
         return view;
@@ -137,6 +142,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             else{--play_number;}
         }
         PathSet();
+        TextSet();
         ArtworkSet();
     }
 
@@ -146,6 +152,15 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             Log.d("picture","null");
         }else {
             artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
+        }
+    }
+
+    public void TextSet(){
+        title = mediametadataretriever.extractMetadata(mediametadataretriever.METADATA_KEY_TITLE);
+        if(title == null){
+            Log.d("title","null");
+        }else{
+            title_v.setText(title);
         }
     }
 
