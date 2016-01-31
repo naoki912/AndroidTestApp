@@ -2,13 +2,8 @@ package wcdi.wcdiplayer;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,14 +21,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        final Fragment playingFragment = PlayingFragment.newInstance(null, null);
-//        final Fragment playingFragment = new PlayingFragment();
         final Fragment albumFragment = AlbumFragment.newInstance(new File("/"));
-        System.out.println(Environment.getExternalStorageDirectory().toString());
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment, albumFragment)
-//                .add(R.id.fragment, playingFragment)
                 .commit();
 
 /*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
