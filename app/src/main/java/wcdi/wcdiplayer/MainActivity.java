@@ -1,9 +1,8 @@
 package wcdi.wcdiplayer;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +11,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+
+
 public class MainActivity extends AppCompatActivity {
-
-    // commit test
-
-    private FragmentManager fragmentManager = getFragmentManager();
-    private FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    private Fragment playingFragment = new PlayingFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +25,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final Fragment playingFragment = PlayingFragment.newInstance(null, null);
+        final Fragment albumFragment = AlbumFragment.newInstance(new File("/"));
+        System.out.println(Environment.getExternalStorageDirectory().toString());
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment, albumFragment)
+                .commit();
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
 
-        fragmentTransaction.replace(R.id.fragment, playingFragment);
-//        fragmentTransaction.add(R.id.fragment, playingFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() != 0) {
+            getFragmentManager().popBackStack();
+        }
     }
 
     @Override
@@ -66,4 +71,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
