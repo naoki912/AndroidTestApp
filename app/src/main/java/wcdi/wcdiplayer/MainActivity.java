@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
     public void onAlbumFileClick(String string) {
         getFragmentManager()
                 .beginTransaction()
-//                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
                 .replace(R.id.fragment, PlayingFragment.newInstance(new File(string), null))
                 .addToBackStack(null)
                 .commit();

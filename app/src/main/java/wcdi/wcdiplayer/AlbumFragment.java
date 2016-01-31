@@ -3,13 +3,11 @@ package wcdi.wcdiplayer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import java.io.File;
 
@@ -110,16 +108,13 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
                     .addToBackStack(null)
                     .commit();
         } else {
-            // ここでListを作成する処理を実装し、Activity経由でPlayingServiceへListを渡す
-            // コールバックインターフェイスを定義して、イベントをActivity側に飛ばして
-            // Activity側でPlayingFragmentを生成する
-
 //            List<String> stringList = null;
             // とりあえず音楽ファイルかの判定は後で考える
 //            for (File f : path.getParentFile().listFiles()) {
 //                stringList.add(f.toString());
 //            }
 
+            // 以下の処理はすべてActivity側で行うように実装済み
 //            getFragmentManager()
 //                    .beginTransaction()
 ////                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
@@ -132,7 +127,7 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     }
 
     public interface OnAlbumFileClickListener {
-        public void onAlbumFileClick(String string);
+        void onAlbumFileClick(String string);
     }
 
 }
