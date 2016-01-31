@@ -75,4 +75,5 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
                 .addToBackStack(null)
                 .commit();
     }
+
 }

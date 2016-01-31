@@ -40,11 +40,6 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     private File path;
 
     @Override
-    public void setArguments(Bundle args) {
-        path = new File(args.getString("path"));
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -64,6 +59,9 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+
+        Bundle args = getArguments();
+        path = new File(args.getString("path"));
 
         if (mListView.getCount() == 0) {
             try {

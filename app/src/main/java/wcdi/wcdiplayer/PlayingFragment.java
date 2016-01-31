@@ -44,20 +44,6 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
-    @Override
-    public void setArguments(Bundle args) {
-
-        // newInstance List version
-        mediaPathList = args.getStringArrayList("media_list");
-        play_number = args.getInt("point");
-
-        // ファイルリストに音楽ファイルをすべてフルパスで保存してる
-        // 配列じゃなくてList使えよ
-        // file_listが配列じゃなくてListだとココらへんのキャストが無くて楽
-        file_list = mediaPathList.toArray(new String[mediaPathList.size()]);
-
-    }
-
     public PlayingFragment() {
         // Required empty public constructor
     }
@@ -67,15 +53,26 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
+            Bundle args = getArguments();
+            mediaPathList = args.getStringArrayList("media_list");
+            play_number = args.getInt("point");
+
+            // ファイルリストに音楽ファイルをすべてフルパスで保存してる
+            // 配列じゃなくてList使えよ
+            // file_listが配列じゃなくてListだとココらへんのキャストが無くて楽
+            file_list = mediaPathList.toArray(new String[mediaPathList.size()]);
         }
+
         mediaplayer = new MediaPlayer();
         mediametadataretriever = new MediaMetadataRetriever();
+
         PathSet();
         MusicStart();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_playing, container, false);
         pause_b = (ImageButton)view.findViewById(R.id.pause_button);
