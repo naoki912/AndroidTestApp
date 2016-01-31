@@ -60,8 +60,7 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
-        Bundle args = getArguments();
-        path = new File(args.getString("path"));
+        path = new File(getArguments().getString("path"));
 
         if (mListView.getCount() == 0) {
             try {
