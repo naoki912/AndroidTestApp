@@ -10,16 +10,19 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import wcdi.wcdiplayer.dummy.DummyContent;
-import wcdi.common.widget.GenericArrayAdapter;
+import java.io.File;
+import java.util.List;
+
 import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
 
 public class AlbumFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    public static AlbumFragment newInstance() {
+    public static AlbumFragment newInstance(File file) {
         AlbumFragment fragment = new AlbumFragment();
 
         Bundle args = new Bundle();
+
+        args.putString("path", file.toString());
 
         fragment.setArguments(args);
 
@@ -31,6 +34,13 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
     private AlbumArrayAdapter mAdapter;
 
     public AlbumFragment() {
+    }
+
+    private File path;
+
+    @Override
+    public void setArguments(Bundle args) {
+        path = new File(args.getString("path"));
     }
 
     @Override
@@ -54,13 +64,20 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
+        if (mListView.getCount() == 0) {
+            try {
+                mAdapter.addAll(path.listFiles());
+            } catch (NullPointerException e) {
+                System.out.println(e.getMessage().toString());
+            }
+        }
+
         return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
     }
 
     @Override
@@ -70,6 +87,30 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
+        path = new File(directoryName.getText().toString());
+
+        if (path.isDirectory()) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment, AlbumFragment.newInstance(path))
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+//            List<String> stringList = null;
+            // とりあえず音楽ファイルかの判定は後で考える
+//            for (File f : path.getParentFile().listFiles()) {
+//                stringList.add(f.toString());
+//            }
+            getFragmentManager()
+                    .beginTransaction()
+//                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
+//                    .replace(R.id.fragment, PlayingFragment.newInstance(null, null))
+                    .replace(R.id.fragment, new PlayingFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
 }
