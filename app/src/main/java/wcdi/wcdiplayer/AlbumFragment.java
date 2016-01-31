@@ -113,14 +113,18 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
             // PlayingFragment側のBundleには、再生ポイント(int)、List(Bundleの仕様上ArrayList)を渡す
             // Bundleの仕様上ArrayListを使用
             ArrayList<String> mediaPathList = new ArrayList<>();
+            int point = position;
             for (File f: path.getParentFile().listFiles()) {
                 // ToDo if (音楽ファイルか判定)
                 // 音楽ファイルのみListにぶっこむ
                 // とりあえず音楽ファイルかの判定は後で考える
+
+                // not音楽ファイルがあった場合は追加しない & point--;
                 mediaPathList.add(f.getAbsolutePath());
             }
 
-            mListner.onAlbumFileClick(mediaPathList, 0);
+            // ここのpositionは、上で音楽ファイル以外があった場合、ずれる可能性があるので注意
+            mListner.onAlbumFileClick(mediaPathList, position);
 
         }
 
