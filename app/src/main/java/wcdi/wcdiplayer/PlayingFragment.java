@@ -18,8 +18,6 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     private String dir_path;
     private File dir;
     private String[] file_list;
-//    private List<String> file_list;;
-//何番目かを指定
     private int play_number = 0;
     private MediaPlayer mediaplayer;
     private ImageButton pause_b,prev_b,next_b;
@@ -38,8 +36,6 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void setArguments(Bundle args) {
-        // dir_pathの最後に"/"が無いと、"dir_path + file_list[play_number]"
-        // した場合にディレクトリとファイル名の間に"/"が無くてくっついちゃうので
         dir_path = args.getString("PATH") + "/";
 
         dir = new File(dir_path);
