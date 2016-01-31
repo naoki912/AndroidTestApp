@@ -61,6 +61,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         }
         mediaplayer = new MediaPlayer();
         mediametadataretriever = new MediaMetadataRetriever();
+        PathSet();
         MusicStart();
     }
 
@@ -106,12 +107,9 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             default:
                 break;
         }
-        Log.d("Test", "Check");
     }
 
     public void MusicStart(){
-        full_path = dir_path + file_list[play_number];
-        mediametadataretriever.setDataSource(full_path);
         try {
             mediaplayer.setDataSource(full_path);
             mediaplayer.prepare();
@@ -122,7 +120,6 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                Log.d("Test", "Check");
                 MusicSet(true);
                 MusicStart();
             }
@@ -139,17 +136,21 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             if(play_number <= 0)play_number = file_list.length - 1;
             else{--play_number;}
         }
-        full_path = dir_path + file_list[play_number];
+        PathSet();
         ArtworkSet();
     }
 
     public void ArtworkSet(){
-        full_path = dir_path + file_list[play_number];
         artwork = mediametadataretriever.getEmbeddedPicture();
         if(artwork == null){
             Log.d("picture","null");
         }else {
             artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
         }
+    }
+
+    public void PathSet(){
+        full_path = dir_path + file_list[play_number];
+        mediametadataretriever.setDataSource(full_path);
     }
 }
