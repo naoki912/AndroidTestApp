@@ -3,8 +3,6 @@ package wcdi.wcdiplayer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.List;
 
 import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
 
@@ -110,7 +107,6 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
             getFragmentManager()
                     .beginTransaction()
 //                    .replace(R.id.fragment, PlayingFragment.newInstance(stringList, null))
-//                    .replace(R.id.fragment, PlayingFragment.newInstance(null, null))
                     .replace(R.id.fragment, PlayingFragment.newInstance(path.getParentFile(), null))
                     .addToBackStack(null)
                     .commit();
