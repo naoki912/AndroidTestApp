@@ -13,14 +13,18 @@ import android.widget.ImageButton;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayingFragment extends Fragment implements View.OnClickListener{
     //アルバムのファイルパス指定
     private String dir_path = "/storage/emulated/0/Download/FTL Original Soundtrack/";
     private File dir = new File(dir_path);
     private String[] file_list = dir.list();
-    static private int play_number = 3;
-    private MediaPlayer mediaplayer;
+    //何番目かを指定
+    private int play_number = 3;
+    private ArrayList<MediaPlayer> mediaplayer = new ArrayList<MediaPlayer>();
     private ImageButton pause_b,prev_b,next_b;
 
     public static PlayingFragment newInstance(String param1, String param2) {
@@ -41,7 +45,15 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mediaplayer = new MediaPlayer();
+        for(int n = 0;n <= (file_list.length - 1);n++ ){
+            mediaplayer.add(n,new MediaPlayer());
+            try {
+                mediaplayer.get(n).setDataSource(dir_path + file_list[n]);
+                mediaplayer.get(n).prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if (getArguments() != null) {
         }
         MusicStart();
@@ -61,14 +73,14 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view){
-        Log.d("Test","Test");
+        Log.d("Test","Check");
         switch (view.getId()) {
             case R.id.pause_button:
                 if (mediaplayer.isPlaying()) {
-                    Log.d("Test","pause");
+                    Log.d(String.valueOf(play_number) + " : " + file_list[play_number],"pause");
                     mediaplayer.pause();
                 } else {
-                    Log.d("Test","start");
+                    Log.d(String.valueOf(play_number) + " : " + file_list[play_number],"start");
                     mediaplayer.start();
                 }
                 break;
@@ -91,17 +103,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     }
 
     public void MusicStart(){
-        try {
-            mediaplayer.setDataSource(dir_path + file_list[play_number]);
-            mediaplayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Log.d(String.valueOf(play_number),file_list[play_number]);
-        mediaplayer.start();
-    }
-
-    public void onBeforeClick(){
-
+        mediaplayer.get(play_number).start();
     }
 }
