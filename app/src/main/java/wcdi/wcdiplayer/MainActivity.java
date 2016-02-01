@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements AlbumFragment.OnAlbumFileClickListener {
+public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnFileClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final Fragment albumFragment = AlbumFragment.newInstance(new File("/"));
+        final Fragment albumFragment = DirectoryFragment.newInstance(new File("/"));
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment, albumFragment)
@@ -68,12 +68,20 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
     }
 
     @Override
-    public void onAlbumFileClick(ArrayList<String> mediaPathList, int point) {
+    public void onDirectoryClick(File path) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, point))
+                .replace(R.id.fragment, DirectoryFragment.newInstance(path))
                 .addToBackStack(null)
                 .commit();
     }
 
+    @Override
+    public void onFileClick(ArrayList<String> mediaPathList, int position) {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, position))
+                .addToBackStack(null)
+                .commit();
+    }
 }

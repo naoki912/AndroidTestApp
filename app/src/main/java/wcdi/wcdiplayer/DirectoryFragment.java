@@ -12,16 +12,18 @@ import android.widget.AdapterView;
 import java.io.File;
 import java.util.ArrayList;
 
-import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
+import wcdi.wcdiplayer.widget.DirectoryArrayAdapter;
 
-public class AlbumFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class DirectoryFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    public static AlbumFragment newInstance(File file) {
-        AlbumFragment fragment = new AlbumFragment();
+    private static final String PATH = "path";
+
+    public static DirectoryFragment newInstance(File file) {
+        DirectoryFragment fragment = new DirectoryFragment();
 
         Bundle args = new Bundle();
 
-        args.putString("path", file.toString());
+        args.putString(PATH, file.toString());
 
         fragment.setArguments(args);
 
@@ -30,12 +32,12 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
     private AbsListView mListView;
 
-    private AlbumArrayAdapter mAdapter;
+    private DirectoryArrayAdapter mAdapter;
 
-    public AlbumFragment() {
+    public DirectoryFragment() {
     }
 
-    private OnAlbumFileClickListener mListner;
+    private OnFileClickListener mListner;
 
     private File path;
 
@@ -47,20 +49,25 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
         }
 
-        mAdapter = new AlbumArrayAdapter(getActivity(), R.layout.album_list_item);
+        mAdapter = new DirectoryArrayAdapter(getActivity(), R.layout.directory_list_item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_album, container, false);
+        return inflater.inflate(R.layout.fragment_album, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
-        path = new File(getArguments().getString("path"));
+        path = new File(getArguments().getString(PATH));
 
         if (mListView.getCount() == 0) {
             try {
@@ -70,7 +77,6 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
             }
         }
 
-        return view;
     }
 
     @Override
@@ -78,7 +84,7 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
         super.onAttach(activity);
 
         try {
-            mListner = (OnAlbumFileClickListener) activity;
+            mListner = (OnFileClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
         }
@@ -102,20 +108,15 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
         path = new File(parent.getAdapter().getItem(position).toString());
 
         if (path.isDirectory()) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, AlbumFragment.newInstance(path))
-                    .addToBackStack(null)
-                    .commit();
+
+            mListner.onDirectoryClick(path);
+
         } else {
 
-            // PlayingFragment側のBundleには、再生ポイント(int)、List(Bundleの仕様上ArrayList)を渡す
-            // Bundleの仕様上ArrayListを使用
             ArrayList<String> mediaPathList = new ArrayList<>();
             int point = position;
-            for (File f: path.getParentFile().listFiles()) {
-                // ToDo if (音楽ファイルか判定)
-                // 音楽ファイルのみListにぶっこむ
+            for (File f : path.getParentFile().listFiles()) {
+                // ToDo if (音楽ファイルか判定) 音楽ファイルのみListにぶっこむ
                 // とりあえず音楽ファイルかの判定は後で考える
 
                 // not音楽ファイルがあった場合は追加しない & point--;
@@ -123,14 +124,16 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
             }
 
             // ここのpositionは、上で音楽ファイル以外があった場合、ずれる可能性があるので注意
-            mListner.onAlbumFileClick(mediaPathList, position);
+            mListner.onFileClick(mediaPathList, position);
 
         }
 
     }
 
-    public interface OnAlbumFileClickListener {
-        void onAlbumFileClick(ArrayList<String> mediaPathList, int point);
+    public interface OnFileClickListener {
+        void onDirectoryClick(File path);
+
+        void onFileClick(ArrayList<String> mediaPathList, int position);
     }
 
 }
