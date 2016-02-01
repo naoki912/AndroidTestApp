@@ -109,13 +109,10 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
 
         } else {
 
-            // PlayingFragment側のBundleには、再生ポイント(int)、List(Bundleの仕様上ArrayList)を渡す
-            // Bundleの仕様上ArrayListを使用
             ArrayList<String> mediaPathList = new ArrayList<>();
             int point = position;
             for (File f: path.getParentFile().listFiles()) {
-                // ToDo if (音楽ファイルか判定)
-                // 音楽ファイルのみListにぶっこむ
+                // ToDo if (音楽ファイルか判定) 音楽ファイルのみListにぶっこむ
                 // とりあえず音楽ファイルかの判定は後で考える
 
                 // not音楽ファイルがあった場合は追加しない & point--;
