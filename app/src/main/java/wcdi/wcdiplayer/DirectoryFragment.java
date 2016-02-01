@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import wcdi.wcdiplayer.widget.DirectoryArrayAdapter;
 
-public class DirectoryFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class DirectoryFragment extends Fragment {
 
     private static final String PATH = "path";
 
@@ -65,7 +65,42 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
 
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
+                // itemにpathを保存しておく変数か何かを追加する
+                // TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
+                // path = new File(path.toString() + "/" + directoryName.getText().toString());
+                // ↓
+                // 変更済みだが、この方法で正しいのか分からない
+
+                path = new File(parent.getAdapter().getItem(position).toString());
+
+                if (path.isDirectory()) {
+
+                    mListner.onDirectoryClick(path);
+
+                } else {
+
+                    ArrayList<String> mediaPathList = new ArrayList<>();
+                    int point = position;
+                    for (File f : path.getParentFile().listFiles()) {
+                        // ToDo if (音楽ファイルか判定) 音楽ファイルのみListにぶっこむ
+                        // とりあえず音楽ファイルかの判定は後で考える
+
+                        // not音楽ファイルがあった場合は追加しない & point--;
+                        mediaPathList.add(f.getAbsolutePath());
+                    }
+
+                    // ここのpositionは、上で音楽ファイル以外があった場合、ずれる可能性があるので注意
+                    mListner.onFileClick(mediaPathList, position);
+
+                }
+
+            }
+        });
 
         path = new File(getArguments().getString(PATH));
 
@@ -93,41 +128,6 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        // 現在はadapterのTextViewに表示されているファイル名からpathを生成しているので、
-        // itemにpathを保存しておく変数か何かを追加する
-        // TextView directoryName = (TextView) view.findViewById(R.id.directoryName);
-        // path = new File(path.toString() + "/" + directoryName.getText().toString());
-        // ↓
-        // 変更済みだが、この方法で正しいのか分からない
-
-        path = new File(parent.getAdapter().getItem(position).toString());
-
-        if (path.isDirectory()) {
-
-            mListner.onDirectoryClick(path);
-
-        } else {
-
-            ArrayList<String> mediaPathList = new ArrayList<>();
-            int point = position;
-            for (File f : path.getParentFile().listFiles()) {
-                // ToDo if (音楽ファイルか判定) 音楽ファイルのみListにぶっこむ
-                // とりあえず音楽ファイルかの判定は後で考える
-
-                // not音楽ファイルがあった場合は追加しない & point--;
-                mediaPathList.add(f.getAbsolutePath());
-            }
-
-            // ここのpositionは、上で音楽ファイル以外があった場合、ずれる可能性があるので注意
-            mListner.onFileClick(mediaPathList, position);
-
-        }
-
     }
 
     public interface OnFileClickListener {
