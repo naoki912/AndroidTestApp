@@ -22,14 +22,13 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
     private String dir_path,full_path,title;
     private byte[] artwork;
     private String[] file_list;
+    private ArrayList<String> mediaPathList;
     private File dir;
     private TextView title_v;
     private ImageView artwork_v;
     private ImageButton pause_b,prev_b,next_b;
     private MediaPlayer mediaplayer;
     private MediaMetadataRetriever mediametadataretriever;
-
-    private ArrayList<String> mediaPathList;
 
     public static PlayingFragment newInstance(ArrayList<String> mediaPathList, int point) {
         PlayingFragment fragment = new PlayingFragment();
@@ -66,7 +65,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         mediaplayer = new MediaPlayer();
         mediametadataretriever = new MediaMetadataRetriever();
 
-        PathSet();
+        setPath();
         MusicStart();
     }
 
@@ -85,8 +84,8 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         prev_b.setOnClickListener(this);
         next_b.setOnClickListener(this);
 
-        TextSet();
-        ArtworkSet();
+        setText();
+        setArtwork();
 
         return view;
     }
@@ -145,12 +144,12 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
             if(play_number <= 0)play_number = file_list.length - 1;
             else{--play_number;}
         }
-        PathSet();
-        TextSet();
-        ArtworkSet();
+        setPath();
+        setText();
+        setArtwork();
     }
 
-    public void ArtworkSet(){
+    public void setArtwork(){
         artwork = mediametadataretriever.getEmbeddedPicture();
         if(artwork == null){
             Log.d("picture","null");
@@ -159,7 +158,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void TextSet(){
+    public void setText(){
         title = mediametadataretriever.extractMetadata(mediametadataretriever.METADATA_KEY_TITLE);
         if(title == null){
             Log.d("title","null");
@@ -168,7 +167,7 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void PathSet(){
+    public void setPath(){
         // file_listに音楽ファイルをフルパスで保存したのでこの処理は要らない
         // full_path変数を消してもおｋ
         // full_path = dir_path + file_list[play_number];
