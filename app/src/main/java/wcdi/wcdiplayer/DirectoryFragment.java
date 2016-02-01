@@ -111,7 +111,7 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
 
             ArrayList<String> mediaPathList = new ArrayList<>();
             int point = position;
-            for (File f: path.getParentFile().listFiles()) {
+            for (File f : path.getParentFile().listFiles()) {
                 // ToDo if (音楽ファイルか判定) 音楽ファイルのみListにぶっこむ
                 // とりあえず音楽ファイルかの判定は後で考える
 
@@ -128,6 +128,7 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
 
     public interface OnFileClickListener {
         void onDirectoryClick(File path);
+
         void onFileClick(ArrayList<String> mediaPathList, int point);
     }
 
