@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnAlbumFileClickListener {
+public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnFileClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +68,20 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
     }
 
     @Override
-    public void onAlbumFileClick(ArrayList<String> mediaPathList, int point) {
+    public void onDirectoryClick(File path) {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment, DirectoryFragment.newInstance(path))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onFileClick(ArrayList<String> mediaPathList, int point) {
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, point))
                 .addToBackStack(null)
                 .commit();
     }
-
 }

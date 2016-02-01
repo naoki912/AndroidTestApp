@@ -16,12 +16,14 @@ import wcdi.wcdiplayer.widget.DirectoryArrayAdapter;
 
 public class DirectoryFragment extends Fragment implements AbsListView.OnItemClickListener {
 
+    private static final String PATH = "path";
+
     public static DirectoryFragment newInstance(File file) {
         DirectoryFragment fragment = new DirectoryFragment();
 
         Bundle args = new Bundle();
 
-        args.putString("path", file.toString());
+        args.putString(PATH, file.toString());
 
         fragment.setArguments(args);
 
@@ -35,7 +37,7 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
     public DirectoryFragment() {
     }
 
-    private OnAlbumFileClickListener mListner;
+    private OnFileClickListener mListner;
 
     private File path;
 
@@ -60,7 +62,7 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
-        path = new File(getArguments().getString("path"));
+        path = new File(getArguments().getString(PATH));
 
         if (mListView.getCount() == 0) {
             try {
@@ -78,7 +80,7 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
         super.onAttach(activity);
 
         try {
-            mListner = (OnAlbumFileClickListener) activity;
+            mListner = (OnFileClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
         }
@@ -102,11 +104,9 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
         path = new File(parent.getAdapter().getItem(position).toString());
 
         if (path.isDirectory()) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, DirectoryFragment.newInstance(path))
-                    .addToBackStack(null)
-                    .commit();
+
+            mListner.onDirectoryClick(path);
+
         } else {
 
             // PlayingFragment側のBundleには、再生ポイント(int)、List(Bundleの仕様上ArrayList)を渡す
@@ -123,14 +123,15 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
             }
 
             // ここのpositionは、上で音楽ファイル以外があった場合、ずれる可能性があるので注意
-            mListner.onAlbumFileClick(mediaPathList, position);
+            mListner.onFileClick(mediaPathList, position);
 
         }
 
     }
 
-    public interface OnAlbumFileClickListener {
-        void onAlbumFileClick(ArrayList<String> mediaPathList, int point);
+    public interface OnFileClickListener {
+        void onDirectoryClick(File path);
+        void onFileClick(ArrayList<String> mediaPathList, int point);
     }
 
 }
