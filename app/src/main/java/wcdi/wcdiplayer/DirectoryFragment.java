@@ -133,7 +133,7 @@ public class DirectoryFragment extends Fragment implements AbsListView.OnItemCli
     public interface OnFileClickListener {
         void onDirectoryClick(File path);
 
-        void onFileClick(ArrayList<String> mediaPathList, int point);
+        void onFileClick(ArrayList<String> mediaPathList, int position);
     }
 
 }

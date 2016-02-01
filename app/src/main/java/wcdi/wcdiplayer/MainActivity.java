@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
     }
 
     @Override
-    public void onFileClick(ArrayList<String> mediaPathList, int point) {
+    public void onFileClick(ArrayList<String> mediaPathList, int position) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, point))
+                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, position))
                 .addToBackStack(null)
                 .commit();
     }
