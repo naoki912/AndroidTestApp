@@ -1,5 +1,6 @@
 package wcdi.wcdiplayer;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -9,34 +10,35 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PlayingFragment extends Fragment implements View.OnClickListener{
-    private int play_number;
-    private String dir_path,full_path,title;
-    private byte[] artwork;
-    private String[] file_list;
+public class PlayingFragment extends Fragment {
+
+    private static String ARGUMENT1 = "point";
+
+    private static String ARGUMENT2 = "media_list";
+
+    private int position;
+
     private ArrayList<String> mediaPathList;
-    private File dir;
-    private TextView title_v;
-    private ImageView artwork_v;
-    private ImageButton pause_b,prev_b,next_b;
-    private MediaPlayer mediaplayer;
-    private MediaMetadataRetriever mediametadataretriever;
+
+    private TextView titleView;
+
+    private ImageView artworkView;
+
+    private MediaPlayer mediaPlayer;
 
     public static PlayingFragment newInstance(ArrayList<String> mediaPathList, int point) {
         PlayingFragment fragment = new PlayingFragment();
 
         Bundle args = new Bundle();
-
-        args.putStringArrayList("media_list", mediaPathList);
-        args.putInt("point", point);
+        args.putInt(ARGUMENT1, point);
+        args.putStringArrayList(ARGUMENT2, mediaPathList);
 
         fragment.setArguments(args);
 
@@ -53,125 +55,119 @@ public class PlayingFragment extends Fragment implements View.OnClickListener{
 
         if (getArguments() != null) {
             Bundle args = getArguments();
-            mediaPathList = args.getStringArrayList("media_list");
-            play_number = args.getInt("point");
 
-            // ファイルリストに音楽ファイルをすべてフルパスで保存してる
-            // 配列じゃなくてList使えよ
-            // file_listが配列じゃなくてListだとココらへんのキャストが無くて楽
-            file_list = mediaPathList.toArray(new String[mediaPathList.size()]);
+            position = args.getInt(ARGUMENT1);
+
+            mediaPathList = args.getStringArrayList(ARGUMENT2);
         }
 
-        mediaplayer = new MediaPlayer();
-        mediametadataretriever = new MediaMetadataRetriever();
-
-        setPath();
-        MusicStart();
+        mediaPlayer = new MediaPlayer();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_playing, container, false);
-        pause_b = (ImageButton)view.findViewById(R.id.pause_button);
-        prev_b = (ImageButton)view.findViewById(R.id.prev_button);
-        next_b = (ImageButton)view.findViewById(R.id.next_button);
-        title_v = (TextView)view.findViewById(R.id.titleView);
-        artwork_v = (ImageView)view.findViewById(R.id.artwark_view);
-
-        pause_b.setOnClickListener(this);
-        prev_b.setOnClickListener(this);
-        next_b.setOnClickListener(this);
-
-        setText();
-        setArtwork();
-
-        return view;
+        return inflater.inflate(R.layout.fragment_playing, container, false);
     }
 
     @Override
-    public void onClick(View view){
-        switch (view.getId()) {
-            case R.id.pause_button:
-                if (mediaplayer.isPlaying()) {
-                    Log.d(String.valueOf(play_number) + " : " + file_list[play_number],"pause");
-                    mediaplayer.pause();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        titleView = (TextView) view.findViewById(R.id.titleView);
+
+        artworkView = (ImageView) view.findViewById(R.id.artwark_view);
+
+        view.findViewById(R.id.pause_button).setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
                 } else {
-                    Log.d(String.valueOf(play_number) + " : " + file_list[play_number],"start");
-                    mediaplayer.start();
+                    mediaPlayer.start();
                 }
-                break;
-            case R.id.prev_button:
-                MusicSet(false);
-                MusicStart();
+            }
+        });
 
-                break;
-            case R.id.next_button:
-                MusicSet(true);
-                MusicStart();
+        view.findViewById(R.id.prev_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position = (position > 0 ? position : mediaPathList.size()) - 1;
 
-                break;
-            default:
-                break;
-        }
+                startMusic();
+            }
+        });
+
+        view.findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position = (position + 1) % mediaPathList.size();
+
+                startMusic();
+            }
+        });
+
+        startMusic();
     }
 
-    public void MusicStart(){
+    public void startMusic() {
+        String path = mediaPathList.get(position);
+
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(path);
+
+        MetaData metaData = MetaData.of(mediaMetadataRetriever);
+
+        if (metaData.artwork != null) {
+            artworkView.setImageBitmap(metaData.artwork);
+        }
+
+        if (metaData.title != null) {
+            titleView.setText(metaData.title);
+        }
+
+        mediaPlayer.reset();
+
         try {
-            mediaplayer.setDataSource(full_path);
-            mediaplayer.prepare();
+            mediaPlayer.setDataSource(path);
+            mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mediaplayer.start();
-        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+        mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                MusicSet(true);
-                MusicStart();
+                position = (position + 1) % mediaPathList.size();
+
+                startMusic();
             }
         });
-        Log.d(String.valueOf(play_number), file_list[play_number]);
+
+        Log.d("Debug: ", position + mediaPathList.get(position));
     }
 
-    public void MusicSet(boolean arrow){
-        mediaplayer.reset();
-        if(arrow){
-            if(play_number >= (file_list.length - 1))play_number = 0;
-            else{++play_number;}
-        }else{
-            if(play_number <= 0)play_number = file_list.length - 1;
-            else{--play_number;}
+    public static class MetaData {
+
+        public final String title;
+
+        public final Bitmap artwork;
+
+        public MetaData(String title, Bitmap artwork) {
+            this.title = title;
+            this.artwork = artwork;
         }
-        setPath();
-        setText();
-        setArtwork();
-    }
 
-    public void setArtwork(){
-        artwork = mediametadataretriever.getEmbeddedPicture();
-        if(artwork == null){
-            Log.d("picture","null");
-        }else {
-            artwork_v.setImageBitmap(BitmapFactory.decodeByteArray(artwork, 0, artwork.length));
+        public static MetaData of(MediaMetadataRetriever mediaMetadataRetriever) {
+            byte[] artwork = mediaMetadataRetriever.getEmbeddedPicture();
+
+            return new MetaData(
+                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
+                artwork == null ? null : BitmapFactory.decodeByteArray(artwork, 0, artwork.length)
+            );
+
         }
+
     }
 
-    public void setText(){
-        title = mediametadataretriever.extractMetadata(mediametadataretriever.METADATA_KEY_TITLE);
-        if(title == null){
-            Log.d("title","null");
-        }else{
-            title_v.setText(title);
-        }
-    }
-
-    public void setPath(){
-        // file_listに音楽ファイルをフルパスで保存したのでこの処理は要らない
-        // full_path変数を消してもおｋ
-        // full_path = dir_path + file_list[play_number];
-        full_path = file_list[play_number];
-        mediametadataretriever.setDataSource(full_path);
-    }
 }
