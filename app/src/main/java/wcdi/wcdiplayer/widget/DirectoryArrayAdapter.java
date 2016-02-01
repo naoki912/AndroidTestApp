@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.List;
 
 import wcdi.common.widget.GenericArrayAdapter;
 import wcdi.wcdiplayer.R;
@@ -15,10 +14,6 @@ import wcdi.wcdiplayer.R;
 public class DirectoryArrayAdapter extends GenericArrayAdapter<File> {
 
     private final LayoutInflater inflater;
-
-    private List<File> mObjects;
-
-    private final Object mLock;
 
     public DirectoryArrayAdapter(Context context, int resource) {
         super(context, resource);
