@@ -12,12 +12,12 @@ import android.widget.AdapterView;
 import java.io.File;
 import java.util.ArrayList;
 
-import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
+import wcdi.wcdiplayer.widget.DirectoryArrayAdapter;
 
-public class AlbumFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class DirectoryFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    public static AlbumFragment newInstance(File file) {
-        AlbumFragment fragment = new AlbumFragment();
+    public static DirectoryFragment newInstance(File file) {
+        DirectoryFragment fragment = new DirectoryFragment();
 
         Bundle args = new Bundle();
 
@@ -30,9 +30,9 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
     private AbsListView mListView;
 
-    private AlbumArrayAdapter mAdapter;
+    private DirectoryArrayAdapter mAdapter;
 
-    public AlbumFragment() {
+    public DirectoryFragment() {
     }
 
     private OnAlbumFileClickListener mListner;
@@ -47,7 +47,7 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
 
         }
 
-        mAdapter = new AlbumArrayAdapter(getActivity(), R.layout.album_list_item);
+        mAdapter = new DirectoryArrayAdapter(getActivity(), R.layout.directory_list_item);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AlbumFragment extends Fragment implements AbsListView.OnItemClickLi
         if (path.isDirectory()) {
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment, AlbumFragment.newInstance(path))
+                    .replace(R.id.fragment, DirectoryFragment.newInstance(path))
                     .addToBackStack(null)
                     .commit();
         } else {

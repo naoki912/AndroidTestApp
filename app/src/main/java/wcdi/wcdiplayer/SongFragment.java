@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import wcdi.wcdiplayer.dummy.DummyContent;
-import wcdi.wcdiplayer.widget.AlbumArrayAdapter;
+import wcdi.wcdiplayer.widget.DirectoryArrayAdapter;
 
 public class SongFragment extends ListFragment {
 
@@ -26,7 +24,7 @@ public class SongFragment extends ListFragment {
 
     private AbsListView mListView;
 
-    private AlbumArrayAdapter mAdapter;
+    private DirectoryArrayAdapter mAdapter;
 
     public SongFragment() {
     }

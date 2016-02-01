@@ -12,7 +12,7 @@ import java.util.List;
 import wcdi.common.widget.GenericArrayAdapter;
 import wcdi.wcdiplayer.R;
 
-public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
+public class DirectoryArrayAdapter extends GenericArrayAdapter<File> {
 
     private final LayoutInflater inflater;
 
@@ -20,7 +20,7 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
 
     private final Object mLock;
 
-    public AlbumArrayAdapter(Context context, int resource) {
+    public DirectoryArrayAdapter(Context context, int resource) {
         super(context, resource);
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -36,7 +36,7 @@ public class AlbumArrayAdapter extends GenericArrayAdapter<File> {
         View view;
 
         if (convertView == null) {
-            view = inflater.inflate(R.layout.album_list_item, parent, false);
+            view = inflater.inflate(R.layout.directory_list_item, parent, false);
         } else {
             view = convertView;
         }

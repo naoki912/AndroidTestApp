@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements AlbumFragment.OnAlbumFileClickListener {
+public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnAlbumFileClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final Fragment albumFragment = AlbumFragment.newInstance(new File("/"));
+        final Fragment albumFragment = DirectoryFragment.newInstance(new File("/"));
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment, albumFragment)
