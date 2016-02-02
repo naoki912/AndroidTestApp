@@ -6,14 +6,13 @@
 
     <ImageView
         android:layout_width="86dp"
-        android:layout_height="86dp"
-        android:id="@+id/albumImageView"
+        android:layout_height="88dp"
+        android:id="@+id/cloudImage"
         android:src="@drawable/albumdefault" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="86dp"
-        android:text="DirectoryOrFile"
-        android:id="@+id/directoryName" />
-
+        android:text="CloudFile"
+        android:id="@+id/cloudFileName" />
 </LinearLayout>

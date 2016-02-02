@@ -1,6 +1,5 @@
 package wcdi.wcdiplayer;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,17 +41,23 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                 int id = menuItem.getItemId();
 
                 if (id == R.id.nav_camera) {
-                    // Handle the camera action
                 } else if (id == R.id.nav_gallery) {
-
                 } else if (id == R.id.nav_slideshow) {
-
                 } else if (id == R.id.nav_manage) {
-
                 } else if (id == R.id.nav_share) {
-
                 } else if (id == R.id.nav_send) {
-
+                } else if (id == R.id.nav_directory) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, DirectoryFragment.newInstance(new File("/")))
+                            .addToBackStack(null)
+                            .commit();
+                } else if (id == R.id.nav_cloud) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, CloudFragment.newInstance(""))
+                            .addToBackStack(null)
+                            .commit();
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -62,14 +67,6 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
             }
         });
 
-
-        final Fragment directoryFragment = DirectoryFragment.newInstance(new File("/"));
-        final Fragment cloudFragment = CloudFragment.newInstance("http://example.org/");
-        getFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment, directoryFragment)
-                        // .add(R.id.fragment, cloudFragment)
-                .commit();
     }
 
     @Override
