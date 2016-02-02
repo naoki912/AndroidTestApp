@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ public class PlayingFragment extends Fragment {
     private int position;
 
     private ArrayList<String> mediaPathList;
+
+    private ImageButton pauseButton;
 
     private TextView titleView;
 
@@ -77,7 +80,9 @@ public class PlayingFragment extends Fragment {
 
         artworkView = (ImageView) view.findViewById(R.id.artwark_view);
 
-        view.findViewById(R.id.pause_button).setOnClickListener(new Button.OnClickListener() {
+        pauseButton = (ImageButton) view.findViewById(R.id.pause_button);
+
+        pauseButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mediaPlayer.isPlaying()) {
