@@ -2,6 +2,10 @@ package wcdi.wcdiplayer;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,27 +25,62 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        final Fragment albumFragment = DirectoryFragment.newInstance(new File("/"));
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @SuppressWarnings("StatementWithEmptyBody")
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                // Handle navigation view item clicks here.
+                int id = menuItem.getItemId();
+
+                if (id == R.id.nav_camera) {
+                    // Handle the camera action
+                } else if (id == R.id.nav_gallery) {
+
+                } else if (id == R.id.nav_slideshow) {
+
+                } else if (id == R.id.nav_manage) {
+
+                } else if (id == R.id.nav_share) {
+
+                } else if (id == R.id.nav_send) {
+
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+
+            }
+        });
+
+
+        final Fragment directoryFragment = DirectoryFragment.newInstance(new File("/"));
+        final Fragment cloudFragment = CloudFragment.newInstance("http://example.org/");
         getFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment, albumFragment)
+                .add(R.id.fragment, directoryFragment)
+                        // .add(R.id.fragment, cloudFragment)
                 .commit();
-
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
     }
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() != 0) {
-            getFragmentManager().popBackStack();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (getFragmentManager().getBackStackEntryCount() != 0) {
+                getFragmentManager().popBackStack();
+            }
         }
     }
 
@@ -84,4 +123,5 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                 .addToBackStack(null)
                 .commit();
     }
+
 }
