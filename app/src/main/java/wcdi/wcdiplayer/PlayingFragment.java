@@ -33,21 +33,36 @@ public class PlayingFragment extends Fragment {
 
     private MediaPlayer mediaPlayer;
 
+    private static PlayingFragment mPlayingFragment;
+
     public static PlayingFragment newInstance(ArrayList<String> mediaPathList, int point) {
-        PlayingFragment fragment = new PlayingFragment();
 
-        Bundle args = new Bundle();
-        args.putInt(ARGUMENT1, point);
-        args.putStringArrayList(ARGUMENT2, mediaPathList);
+        if (mPlayingFragment == null) {
 
-        fragment.setArguments(args);
+            mPlayingFragment = new PlayingFragment();
 
-        return fragment;
+            Bundle args = new Bundle();
+            args.putInt(ARGUMENT1, point);
+            args.putStringArrayList(ARGUMENT2, mediaPathList);
+
+            mPlayingFragment.setArguments(args);
+
+            return mPlayingFragment;
+        }
+
+        return mPlayingFragment;
     }
 
-    public PlayingFragment() {
-        // Required empty public constructor
+    public static PlayingFragment getInstance() {
+
+//        if (mPlayingFragment == null) {
+//            newInstance(new ArrayList<String>(), 0);
+//        }
+
+        return mPlayingFragment;
     }
+
+    private PlayingFragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

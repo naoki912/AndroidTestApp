@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnFileClickListener {
@@ -56,6 +57,13 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, CloudFragment.newInstance(""))
+                            .addToBackStack(null)
+                            .commit();
+                } else if (id == R.id.nav_player) {
+                    getFragmentManager()
+                            .beginTransaction()
+//                            .replace(R.id.fragment, PlayingFragment.newInstance(new ArrayList<String>(), 0))
+                            .replace(R.id.fragment, PlayingFragment.getInstance())
                             .addToBackStack(null)
                             .commit();
                 }
