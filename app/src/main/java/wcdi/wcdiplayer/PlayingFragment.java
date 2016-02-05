@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ public class PlayingFragment extends Fragment {
     private int position;
 
     private ArrayList<String> mediaPathList;
+
+    private ImageButton pauseButton;
 
     private TextView titleView;
 
@@ -92,7 +95,9 @@ public class PlayingFragment extends Fragment {
 
         artworkView = (ImageView) view.findViewById(R.id.artwark_view);
 
-        view.findViewById(R.id.pause_button).setOnClickListener(new Button.OnClickListener() {
+        pauseButton = (ImageButton) view.findViewById(R.id.pause_button);
+
+        pauseButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mediaPlayer.isPlaying()) {
@@ -149,7 +154,6 @@ public class PlayingFragment extends Fragment {
             e.printStackTrace();
         }
 
-        mediaPlayer.start();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -158,6 +162,7 @@ public class PlayingFragment extends Fragment {
                 startMusic();
             }
         });
+        mediaPlayer.start();
 
         Log.d("Debug: ", position + mediaPathList.get(position));
     }
@@ -166,10 +171,13 @@ public class PlayingFragment extends Fragment {
 
         public final String title;
 
+        public final String artist;
+
         public final Bitmap artwork;
 
-        public MetaData(String title, Bitmap artwork) {
+        public MetaData(String title, String artist, Bitmap artwork) {
             this.title = title;
+            this.artist = artist;
             this.artwork = artwork;
         }
 
@@ -178,6 +186,7 @@ public class PlayingFragment extends Fragment {
 
             return new MetaData(
                 mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
+                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
                 artwork == null ? null : BitmapFactory.decodeByteArray(artwork, 0, artwork.length)
             );
 
