@@ -12,7 +12,6 @@ import android.view.MenuItem;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnFileClickListener {
@@ -71,10 +70,16 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
-
             }
         });
 
+        // デモで表示させている
+        // 実際は、動画を再生するまで表示にしておく
+        // 動画を停止したらremoveする
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
+                .commit();
     }
 
     @Override
