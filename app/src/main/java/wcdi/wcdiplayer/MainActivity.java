@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,6 +81,20 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                 .beginTransaction()
                 .add(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
                 .commit();
+
+        // 画面下のコントローラをタッチしたときのリスナを設定
+        findViewById(R.id.controls_container)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment, PlayingFragment.getInstance())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+
     }
 
     @Override
