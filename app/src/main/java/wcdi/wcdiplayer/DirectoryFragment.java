@@ -37,7 +37,7 @@ public class DirectoryFragment extends Fragment {
     public DirectoryFragment() {
     }
 
-    private OnFileClickListener mListner;
+    private OnFileClickListener mListener;
 
     private File path;
 
@@ -80,12 +80,12 @@ public class DirectoryFragment extends Fragment {
 
                 if (path.isDirectory()) {
 
-                    mListner.onDirectoryClick(path);
+                    mListener.onDirectoryClick(path);
 
                 } else {
 
                     ArrayList<String> mediaPathList = new ArrayList<>();
-                    int point = position;
+
                     for (File f : path.getParentFile().listFiles()) {
                         // ToDo if (音楽ファイルか判定) 音楽ファイルのみListにぶっこむ
                         // とりあえず音楽ファイルかの判定は後で考える
@@ -95,7 +95,7 @@ public class DirectoryFragment extends Fragment {
                     }
 
                     // ここのpositionは、上で音楽ファイル以外があった場合、ずれる可能性があるので注意
-                    mListner.onFileClick(mediaPathList, position);
+                    mListener.onFileClick(mediaPathList, position);
 
                 }
 
@@ -119,7 +119,7 @@ public class DirectoryFragment extends Fragment {
         super.onAttach(activity);
 
         try {
-            mListner = (OnFileClickListener) activity;
+            mListener = (OnFileClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
         }
