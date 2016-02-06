@@ -45,7 +45,7 @@ public class CloudFragment extends Fragment {
              mUrl = getArguments().getString(URL);
          }
 
-        mAdapter = new AlbumViewAdapter(getActivity(), R.layout.cloud_list_item);
+        mAdapter = new AlbumViewAdapter(getActivity(), R.layout.album_list_item);
 
     }
 
