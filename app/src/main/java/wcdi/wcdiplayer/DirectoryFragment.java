@@ -121,7 +121,7 @@ public class DirectoryFragment extends Fragment {
         try {
             mListener = (OnFileClickListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+            throw new ClassCastException(activity.toString() + " must implement OnFileClickListener");
         }
     }
 
