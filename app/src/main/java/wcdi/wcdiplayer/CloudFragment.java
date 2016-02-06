@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import wcdi.wcdiplayer.widget.CloudViewAdapter;
+import wcdi.wcdiplayer.widget.AlbumViewAdapter;
 
 
 public class CloudFragment extends Fragment {
@@ -19,7 +19,7 @@ public class CloudFragment extends Fragment {
 
     private String mUrl;
 
-    private CloudViewAdapter mAdapter;
+    private AlbumViewAdapter mAdapter;
 
     private AbsListView mListView;
 
@@ -45,7 +45,7 @@ public class CloudFragment extends Fragment {
              mUrl = getArguments().getString(URL);
          }
 
-        mAdapter = new CloudViewAdapter(getActivity(), R.layout.cloud_list_item);
+        mAdapter = new AlbumViewAdapter(getActivity(), R.layout.cloud_list_item);
 
     }
 

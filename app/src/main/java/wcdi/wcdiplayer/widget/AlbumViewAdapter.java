@@ -10,8 +10,8 @@ import wcdi.wcdiplayer.R;
 
 import java.util.List;
 
-public class CloudViewAdapter extends GenericArrayAdapter<String> {
-    public CloudViewAdapter(Context context, int resource) {
+public class AlbumViewAdapter extends GenericArrayAdapter<String> {
+    public AlbumViewAdapter(Context context, int resource) {
         super(context, resource);
     }
 
@@ -19,7 +19,7 @@ public class CloudViewAdapter extends GenericArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
 
-        TextView textView = (TextView) view.findViewById(R.id.cloudFileName);
+        TextView textView = (TextView) view.findViewById(R.id.album_name);
         textView.setText(getItem(position));
 
         return view;

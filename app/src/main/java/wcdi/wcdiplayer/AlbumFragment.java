@@ -5,19 +5,18 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import wcdi.wcdiplayer.widget.CloudViewAdapter;
+import wcdi.wcdiplayer.widget.AlbumViewAdapter;
 
 
 public class AlbumFragment extends Fragment {
 
-    private CloudViewAdapter mAdapter;
+    private AlbumViewAdapter mAdapter;
 
     private AbsListView mListView;
 
@@ -39,7 +38,7 @@ public class AlbumFragment extends Fragment {
 
         }
 
-        mAdapter = new CloudViewAdapter(getActivity(), R.layout.cloud_list_item);
+        mAdapter = new AlbumViewAdapter(getActivity(), R.layout.album_list_item);
 
     }
 
