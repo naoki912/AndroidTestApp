@@ -68,7 +68,7 @@ public class CloudFragment extends Fragment {
             }
         });
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.cloudFragmentLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_cloud_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

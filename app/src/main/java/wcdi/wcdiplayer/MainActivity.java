@@ -15,7 +15,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements DirectoryFragment.OnFileClickListener {
+public class MainActivity extends AppCompatActivity
+        implements DirectoryFragment.OnFileClickListener, SongFragment.OnSongClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                     }
                 });
 
+        // デフォルト画面
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment, AlbumFragment.newInstance())
+                .commit();
     }
 
     @Override
@@ -149,4 +155,13 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
                 .commit();
     }
 
+    @Override
+    public void onSongClick(ArrayList<String> mediaPathList, int position) {
+        getFragmentManager()
+                .beginTransaction()
+//                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, position))
+                .replace(R.id.fragment, PlayingStab.newInstance(mediaPathList, position))
+                .addToBackStack(null)
+                .commit();
+    }
 }

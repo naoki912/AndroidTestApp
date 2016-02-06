@@ -1,30 +1,45 @@
 package wcdi.wcdiplayer;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.ListFragment;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ListView;
+import android.widget.AdapterView;
 
-import wcdi.wcdiplayer.widget.DirectoryArrayAdapter;
+import java.util.ArrayList;
+
+import wcdi.wcdiplayer.widget.SongArrayAdapter;
 
 public class SongFragment extends ListFragment {
 
-    public static SongFragment newInstance(String param1, String param2) {
+    private static final String ALBUM = "album";
+
+    private AbsListView mListView;
+
+    private SongArrayAdapter mAdapter;
+
+    private OnSongClickListener mListener;
+
+    private ArrayList<String> mSongPathList;
+
+    public static SongFragment newInstance(String s) {
         SongFragment fragment = new SongFragment();
 
         Bundle args = new Bundle();
+
+        args.putString(ALBUM, s);
 
         fragment.setArguments(args);
 
         return fragment;
     }
-
-
-    private AbsListView mListView;
-
-    private DirectoryArrayAdapter mAdapter;
 
     public SongFragment() {
     }
@@ -36,13 +51,74 @@ public class SongFragment extends ListFragment {
         if (getArguments() != null) {
         }
 
+        mAdapter = new SongArrayAdapter(getActivity(), R.layout.song_list_item);
 
+        mSongPathList = new ArrayList<>();
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_song, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                mListener.onSongClick(mSongPathList, position);
+
+            }
+        });
+
+        ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
+
+        Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[]{
+                        MediaStore.Audio.Media._ID,
+                        MediaStore.Audio.Media.ARTIST,
+                        MediaStore.Audio.Media.ALBUM,
+                        MediaStore.Audio.Media.DURATION,
+                        MediaStore.Audio.Media.TRACK,
+                        MediaStore.Audio.Media.TITLE,
+                },
+                MediaStore.Audio.Media.ALBUM + "=?",
+                new String[] {
+                        getArguments().getString(ALBUM)
+                },
+                null);
+
+        cursor.moveToFirst();
+
+        if (mListView.getCount() == 0) {
+            do {
+                mAdapter.add(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+
+                mSongPathList.add(
+                        ContentUris.withAppendedId(
+                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                                cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
+                        ).toString()
+                );
+
+            } while (cursor.moveToNext());
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        try {
+            mListener = (OnSongClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnSongClickListener");
+        }
 
     }
 
@@ -52,10 +128,8 @@ public class SongFragment extends ListFragment {
 
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
+    public interface OnSongClickListener {
+        void onSongClick(ArrayList<String> mediaPathList, int position);
     }
 
 }
