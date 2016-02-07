@@ -94,17 +94,9 @@ public class SongFragment extends ListFragment {
         cursor.moveToFirst();
 
         if (mListView.getCount() == 0) {
+            // whileで回すとエラー吐く
             do {
                 mAdapter.add(new SongObject(cursor, getArguments().getString(ALBUM_ART)));
-
-                mSongObjectList.add(
-//                        ContentUris.withAppendedId(
-//                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-//                                cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
-//                        ).toString()
-                        new SongObject(cursor, getArguments().getString(ALBUM_ART))
-                );
-
             } while (cursor.moveToNext());
         }
 
@@ -114,6 +106,8 @@ public class SongFragment extends ListFragment {
                 return lhs.mTrack - rhs.mTrack;
             }
         });
+
+        mSongObjectList = (ArrayList<SongObject>) mAdapter.getAll();
 
     }
 

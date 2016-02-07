@@ -116,4 +116,8 @@ public class GenericArrayAdapter<T> extends BaseAdapter {
             Collections.sort(mObjects, comparator);
         }
     }
+
+    public List<T> getAll() {
+        return mObjects;
+    }
 }
