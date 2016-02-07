@@ -44,7 +44,7 @@ public class PlayingFragment extends Fragment {
 
     public static PlayingFragment newInstance(ArrayList<SongObject> songObjectList, int point) {
 
-        if (mPlayingFragment == null) {
+        if (mPlayingFragment == getInstance()) {
 
             mPlayingFragment = new PlayingFragment();
 
