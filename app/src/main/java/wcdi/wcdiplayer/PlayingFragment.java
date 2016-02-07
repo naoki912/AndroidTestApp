@@ -15,18 +15,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.Serializable;
+
+import wcdi.wcdiplayer.Items.SongObject;
 
 public class PlayingFragment extends Fragment {
 
     private static String ARGUMENT1 = "point";
 
-    private static String ARGUMENT2 = "media_list";
+    private static String ARGUMENT2 = "song_object_list";
 
     private int position;
 
-    private ArrayList<String> mediaPathList;
+    private ArrayList<SongObject> songObjectList;
 
     private ImageButton pauseButton;
 
@@ -38,7 +42,7 @@ public class PlayingFragment extends Fragment {
 
     private static PlayingFragment mPlayingFragment;
 
-    public static PlayingFragment newInstance(ArrayList<String> mediaPathList, int point) {
+    public static PlayingFragment newInstance(ArrayList<SongObject> songObjectList, int point) {
 
         if (mPlayingFragment == null) {
 
@@ -46,7 +50,7 @@ public class PlayingFragment extends Fragment {
 
             Bundle args = new Bundle();
             args.putInt(ARGUMENT1, point);
-            args.putStringArrayList(ARGUMENT2, mediaPathList);
+            args.putSerializable(ARGUMENT2, songObjectList);
 
             mPlayingFragment.setArguments(args);
 
@@ -76,7 +80,7 @@ public class PlayingFragment extends Fragment {
 
             position = args.getInt(ARGUMENT1);
 
-            mediaPathList = args.getStringArrayList(ARGUMENT2);
+            songObjectList = (ArrayList<SongObject>)args.getSerializable(ARGUMENT2);
         }
 
         mediaPlayer = new MediaPlayer();
@@ -111,7 +115,7 @@ public class PlayingFragment extends Fragment {
         view.findViewById(R.id.prev_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                position = (position > 0 ? position : mediaPathList.size()) - 1;
+                position = (position > 0 ? position : songObjectList.size()) - 1;
 
                 startMusic();
             }
@@ -120,7 +124,7 @@ public class PlayingFragment extends Fragment {
         view.findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                position = (position + 1) % mediaPathList.size();
+                position = (position + 1) % songObjectList.size();
 
                 startMusic();
             }
@@ -130,25 +134,31 @@ public class PlayingFragment extends Fragment {
     }
 
     public void startMusic() {
-        String path = mediaPathList.get(position);
+        SongObject song = songObjectList.get(position);
 
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(path);
+        if (song.mAlbumArt != null) {
+            File path = new File(song.mAlbumArt);
+            if (path.exists()) {
+                Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
+                ((ImageView) artworkView.findViewById(R.id.artwark_view))
+                        .setImageBitmap(bitmap);
+            } else {
+                ((ImageView) artworkView.findViewById(R.id.artwark_view))
+                        .setImageResource(R.drawable.default_album_art);
+            }
 
-        MetaData metaData = MetaData.of(mediaMetadataRetriever);
-
-        if (metaData.artwork != null) {
-            artworkView.setImageBitmap(metaData.artwork);
         }
 
-        if (metaData.title != null) {
-            titleView.setText(metaData.title);
+        if (song.mTitle != null) {
+            titleView.setText(song.mTitle);
         }
 
         mediaPlayer.reset();
 
+        Log.d("path",song.mPath);
+
         try {
-            mediaPlayer.setDataSource(path);
+            mediaPlayer.setDataSource(song.mPath);
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,41 +167,13 @@ public class PlayingFragment extends Fragment {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                position = (position + 1) % mediaPathList.size();
+                position = (position + 1) % songObjectList.size();
 
                 startMusic();
             }
         });
         mediaPlayer.start();
 
-        Log.d("Debug: ", position + mediaPathList.get(position));
+        Log.d("Debug: ", position + songObjectList.get(position).mTitle);
     }
-
-    public static class MetaData {
-
-        public final String title;
-
-        public final String artist;
-
-        public final Bitmap artwork;
-
-        public MetaData(String title, String artist, Bitmap artwork) {
-            this.title = title;
-            this.artist = artist;
-            this.artwork = artwork;
-        }
-
-        public static MetaData of(MediaMetadataRetriever mediaMetadataRetriever) {
-            byte[] artwork = mediaMetadataRetriever.getEmbeddedPicture();
-
-            return new MetaData(
-                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
-                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
-                artwork == null ? null : BitmapFactory.decodeByteArray(artwork, 0, artwork.length)
-            );
-
-        }
-
-    }
-
 }
