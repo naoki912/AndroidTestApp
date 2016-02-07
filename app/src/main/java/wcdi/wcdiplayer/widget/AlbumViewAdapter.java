@@ -30,8 +30,6 @@ public class AlbumViewAdapter extends GenericArrayAdapter<AlbumObject> {
         ((TextView) view.findViewById(R.id.album_artist))
                 .setText(getItem(position).mArtist);
 
-        // SongViewAdapter側ではif判定させたがAlbumViewAdapter側では上手く行かなかったのでtrycatchに戻した
-        // 要検証
         try {
             File path = new File(getItem(position).mAlbumArt);
             Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());

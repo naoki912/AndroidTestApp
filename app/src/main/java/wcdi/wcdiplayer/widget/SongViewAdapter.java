@@ -43,12 +43,12 @@ public class SongViewAdapter extends GenericArrayAdapter<SongObject> {
                     .setText(minute.toString() + ":" + second.toString());
         }
 
-        File path = new File(getItem(position).mAlbumArt);
-        if (path.exists()) {
+        try {
+            File path = new File(getItem(position).mAlbumArt);
             Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
             ((ImageView) view.findViewById(R.id.song_image))
                     .setImageBitmap(bitmap);
-        } else {
+        } catch (NullPointerException e) {
             ((ImageView) view.findViewById(R.id.song_image))
                     .setImageResource(R.drawable.default_album_art);
         }

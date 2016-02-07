@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import java.util.ArrayList;
+
 import wcdi.wcdiplayer.Items.AlbumObject;
+import wcdi.wcdiplayer.Items.SongObject;
 import wcdi.wcdiplayer.widget.AlbumViewAdapter;
 
 
@@ -23,10 +26,6 @@ public class AlbumFragment extends Fragment {
 
     public static AlbumFragment newInstance() {
         AlbumFragment fragment = new AlbumFragment();
-
-//        Bundle args = new Bundle();
-
-//        fragment.setArguments(args);
 
         return fragment;
     }
@@ -59,10 +58,27 @@ public class AlbumFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
+
+                Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        SongObject.COLUMNS,
+                        MediaStore.Audio.Media.ALBUM_ID + "=?",
+                        new String[] {
+                                String.valueOf(((AlbumObject) parent.getAdapter().getItem(position)).mId)
+                        },
+                        null);
+
+                cursor.moveToFirst();
+
+                ArrayList<SongObject> songObjects = new ArrayList<SongObject>();
+
+                do {
+                    songObjects.add(new SongObject(cursor, mAdapter.getItem(position).mAlbumArt));
+                } while (cursor.moveToNext());
+
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment, SongFragment.newInstance(
-                                (AlbumObject) parent.getAdapter().getItem(position)))
+                        .replace(R.id.fragment, SongFragment.newInstance(songObjects))
                         .addToBackStack(null)
                         .commit();
 

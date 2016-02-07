@@ -1,11 +1,8 @@
 package wcdi.wcdiplayer;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.app.ListFragment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +12,12 @@ import android.widget.AdapterView;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import wcdi.wcdiplayer.Items.AlbumObject;
 import wcdi.wcdiplayer.Items.SongObject;
 import wcdi.wcdiplayer.widget.SongViewAdapter;
 
 public class SongFragment extends ListFragment {
 
-    private static final String ALBUM_ID = "album";
-
-    private static final String ALBUM_ART = "album_art";
+    private static final String SONG_OBJECTS = "song_objects";
 
     private AbsListView mListView;
 
@@ -33,13 +27,12 @@ public class SongFragment extends ListFragment {
 
     private ArrayList<SongObject> mSongObjectList;
 
-    public static SongFragment newInstance(AlbumObject albumObject) {
+    public static SongFragment newInstance(ArrayList<SongObject> songObjects) {
         SongFragment fragment = new SongFragment();
 
         Bundle args = new Bundle();
 
-        args.putString(ALBUM_ID, String.valueOf(albumObject.mId));
-        args.putString(ALBUM_ART, String.valueOf(albumObject.mAlbumArt));
+        args.putSerializable(SONG_OBJECTS, songObjects);
 
         fragment.setArguments(args);
 
@@ -81,23 +74,8 @@ public class SongFragment extends ListFragment {
             }
         });
 
-        ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
-
-        Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                SongObject.COLUMNS,
-                MediaStore.Audio.Media.ALBUM_ID + "=?",
-                new String[] {
-                        getArguments().getString(ALBUM_ID)
-                },
-                null);
-
-        cursor.moveToFirst();
-
         if (mListView.getCount() == 0) {
-            // whileで回すとエラー吐く
-            do {
-                mAdapter.add(new SongObject(cursor, getArguments().getString(ALBUM_ART)));
-            } while (cursor.moveToNext());
+            mAdapter.addAll((ArrayList<SongObject>) getArguments().getSerializable(SONG_OBJECTS));
         }
 
         mAdapter.sort(new Comparator<SongObject>() {

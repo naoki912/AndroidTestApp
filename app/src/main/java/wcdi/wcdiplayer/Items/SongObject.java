@@ -5,8 +5,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.Serializable;
 
-public class SongObject {
+
+public class SongObject implements Serializable {
 
     public static final String[] COLUMNS = {
             MediaStore.Audio.Media._ID,
