@@ -43,13 +43,7 @@ public class MainActivity extends AppCompatActivity
                 // Handle navigation view item clicks here.
                 int id = menuItem.getItemId();
 
-                if (id == R.id.nav_camera) {
-                } else if (id == R.id.nav_gallery) {
-                } else if (id == R.id.nav_slideshow) {
-                } else if (id == R.id.nav_manage) {
-                } else if (id == R.id.nav_share) {
-                } else if (id == R.id.nav_send) {
-                } else if (id == R.id.nav_player) {
+                if (id == R.id.nav_player) {
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, PlayingFragment.getInstance())
