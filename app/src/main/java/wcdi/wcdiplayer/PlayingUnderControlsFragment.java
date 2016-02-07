@@ -20,13 +20,13 @@ public class PlayingUnderControlsFragment extends Fragment {
     public static PlayingUnderControlsFragment getInstance() {
 
         if (playingUnderControlsFragment == null) {
+
             playingUnderControlsFragment = new PlayingUnderControlsFragment();
+
         }
 
         return playingUnderControlsFragment;
     }
-
-    private PlayingUnderControlsFragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class PlayingUnderControlsFragment extends Fragment {
         mImageView = (ImageView) view.findViewById(R.id.under_controls_image);
     }
 
-    public void setImage() {
+    public void setImage(String path) {
         // 渡す画像形式
         // mImageView.setimage
     }
