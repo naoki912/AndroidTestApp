@@ -37,7 +37,8 @@ public class AlbumViewAdapter extends GenericArrayAdapter<AlbumObject> {
                     .setImageBitmap(bitmap);
         } catch (NullPointerException e) {
             // アルバムアートが定義されていない場合はぬるぽになる
-            // 新しく設定しなおしてあげないと、viewの再利用時に前回のジャケットが残ってしまう
+            // 新しく設定しなおしてあげないと、viewの再利用時に前回のジャケットが残ってしまう？
+            // 要検証
             ((ImageView) view.findViewById(R.id.album_image))
                     .setImageResource(R.drawable.default_album_art);
         }
