@@ -23,48 +23,48 @@ import wcdi.wcdiplayer.Items.SongObject;
 
 public class PlayingFragment extends Fragment {
 
-    private static String ARGUMENT1 = "point";
+    private static String ARGUMENT_1 = "point";
 
-    private static String ARGUMENT2 = "song_object_list";
+    private static String ARGUMENT_2 = "song_object_list";
 
-    private static int position;
+    private static int sPosition;
 
-    private static boolean started = false;
+    private static boolean sStarted = false;
 
-    private  ArrayList<SongObject> songObjectList;
+    private  ArrayList<SongObject> mSongObjectList;
 
-    private ImageButton pauseButton;
+    private ImageButton mPauseButton;
 
-    private TextView titleView,artistView,albumView;
+    private TextView mTitleView, mArtistView, mAlbumView;
 
-    private ImageView artworkView;
+    private ImageView mArtworkView;
 
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mMediaPlayer;
 
-    private static PlayingFragment playingFragment;
+    private static PlayingFragment sPlayingFragment;
 
     private OnPlayingFragmentListener mListener;
 
     public static PlayingFragment newInstance(ArrayList<SongObject> mSongObjectList, int point) {
 
-        if (playingFragment == null) {
-            playingFragment = new PlayingFragment();
-        }else if(playingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath) && playingFragment.mediaPlayer.isPlaying()){
-            started = true;
-            return playingFragment;
+        if (sPlayingFragment == null) {
+            sPlayingFragment = new PlayingFragment();
+        }else if(sPlayingFragment.mSongObjectList.get(sPosition).mPath.equals(mSongObjectList.get(point).mPath) && sPlayingFragment.mMediaPlayer.isPlaying()){
+            sStarted = true;
+            return sPlayingFragment;
         }else{
-            playingFragment.mediaPlayer.stop();
-            playingFragment.mediaPlayer.release();
+            sPlayingFragment.mMediaPlayer.stop();
+            sPlayingFragment.mMediaPlayer.release();
         }
         Bundle args = new Bundle();
-        args.putInt(ARGUMENT1, point);
-        args.putSerializable(ARGUMENT2, mSongObjectList);
-        playingFragment.setArguments(args);
-        return playingFragment;
+        args.putInt(ARGUMENT_1, point);
+        args.putSerializable(ARGUMENT_2, mSongObjectList);
+        sPlayingFragment.setArguments(args);
+        return sPlayingFragment;
     }
 
     public static PlayingFragment getInstance() {
-        return playingFragment;
+        return sPlayingFragment;
     }
 
     private PlayingFragment(){}
@@ -76,12 +76,12 @@ public class PlayingFragment extends Fragment {
         if (getArguments() != null) {
             Bundle args = getArguments();
 
-            position = args.getInt(ARGUMENT1);
+            sPosition = args.getInt(ARGUMENT_1);
 
-            songObjectList = (ArrayList<SongObject>)args.getSerializable(ARGUMENT2);
+            mSongObjectList = (ArrayList<SongObject>)args.getSerializable(ARGUMENT_2);
         }
 
-        mediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
     }
 
     @Override
@@ -93,25 +93,25 @@ public class PlayingFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        titleView = (TextView) view.findViewById(R.id.title_view);
+        mTitleView = (TextView) view.findViewById(R.id.title_view);
 
-        artistView = (TextView) view.findViewById(R.id.artist_view);
+        mArtistView = (TextView) view.findViewById(R.id.artist_view);
 
-        albumView = (TextView) view.findViewById(R.id.album_view);
+        mAlbumView = (TextView) view.findViewById(R.id.album_view);
 
-        artworkView = (ImageView) view.findViewById(R.id.artwark_view);
+        mArtworkView = (ImageView) view.findViewById(R.id.artwark_view);
 
-        pauseButton = (ImageButton) view.findViewById(R.id.pause_button);
+        mPauseButton = (ImageButton) view.findViewById(R.id.pause_button);
 
-        pauseButton.setOnClickListener(new Button.OnClickListener() {
+        mPauseButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    pauseButton.setImageResource(R.drawable.start);
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.pause();
+                    mPauseButton.setImageResource(R.drawable.start);
                 } else {
-                    mediaPlayer.start();
-                    pauseButton.setImageResource(R.drawable.pause);
+                    mMediaPlayer.start();
+                    mPauseButton.setImageResource(R.drawable.pause);
                 }
             }
         });
@@ -119,7 +119,7 @@ public class PlayingFragment extends Fragment {
         view.findViewById(R.id.prev_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                position = (position > 0 ? position : songObjectList.size()) - 1;
+                sPosition = (sPosition > 0 ? sPosition : mSongObjectList.size()) - 1;
                 startMusic();
             }
         });
@@ -127,7 +127,7 @@ public class PlayingFragment extends Fragment {
         view.findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                position = (position + 1) % songObjectList.size();
+                sPosition = (sPosition + 1) % mSongObjectList.size();
                 startMusic();
             }
         });
@@ -148,59 +148,59 @@ public class PlayingFragment extends Fragment {
     }
 
     public void startMusic() {
-        SongObject song = songObjectList.get(position);
+        SongObject song = mSongObjectList.get(sPosition);
 
         if (song.mAlbumArt != null) {
             File path = new File(song.mAlbumArt);
             if (path.exists()) {
                 Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
-                artworkView.setImageBitmap(bitmap);
+                mArtworkView.setImageBitmap(bitmap);
             } else {
-                artworkView.setImageResource(R.drawable.default_album_art);
+                mArtworkView.setImageResource(R.drawable.default_album_art);
             }
 
         }
 
 
         if (song.mTitle != null) {
-            titleView.setText(song.mTitle);
+            mTitleView.setText(song.mTitle);
         }
 
         if(song.mArtist != null){
-            artistView.setText((song.mArtist));
+            mArtistView.setText((song.mArtist));
         }
 
         if(song.mAlbum != null){
-            albumView.setText(song.mAlbum);
+            mAlbumView.setText(song.mAlbum);
         }
-        mediaPlayer.reset();
+        mMediaPlayer.reset();
 
-        if (!started) {
+        if (!sStarted) {
             try {
-                mediaPlayer.setDataSource(song.mPath);
-                mediaPlayer.prepare();
+                mMediaPlayer.setDataSource(song.mPath);
+                mMediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    position = (position + 1) % songObjectList.size();
+                    sPosition = (sPosition + 1) % mSongObjectList.size();
                     startMusic();
                 }
             });
-            mediaPlayer.start();
+            mMediaPlayer.start();
 
-            mListener.onChangeSong(songObjectList.get(position));
+            mListener.onChangeSong(mSongObjectList.get(sPosition));
 
-            Log.d("Debug: ", position + songObjectList.get(position).mTitle);
+            Log.d("Debug: ", sPosition + mSongObjectList.get(sPosition).mTitle);
         }
-        started = false;
+        sStarted = false;
     }
 
     public String getPath(){
-        return songObjectList.get(position).mPath;
+        return mSongObjectList.get(sPosition).mPath;
     }
 
     public interface OnPlayingFragmentListener {
