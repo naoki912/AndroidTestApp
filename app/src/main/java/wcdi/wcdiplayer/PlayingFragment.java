@@ -142,7 +142,7 @@ public class PlayingFragment extends Fragment {
         try {
             mListener = (OnPlayingFragmentListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnSongClickListener");
+            throw new ClassCastException(activity.toString() + " must implement OnPlayingFragmentListener");
         }
 
     }
