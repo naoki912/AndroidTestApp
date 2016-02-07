@@ -22,8 +22,8 @@ public class ArtistViewAdapter extends GenericArrayAdapter<ArtistObject> {
         ((TextView) view.findViewById(R.id.album_name))
                 .setText(getItem(position).mArtist);
 
-//        ((TextView) view.findViewById(R.id.album_artist))
-//                .setText(getItem(position).mArtist);
+        ((TextView) view.findViewById(R.id.album_artist))
+                .setText("");
 
 //        try {
 //            File path = new File(getItem(position).mAlbumArt);
