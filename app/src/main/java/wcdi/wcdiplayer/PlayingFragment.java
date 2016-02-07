@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ public class PlayingFragment extends Fragment {
 
     private static String ARGUMENT2 = "song_object_list";
 
-    private static int position, textPosition;
+    private static int position;
 
     private static boolean started = false;
 
@@ -36,15 +35,11 @@ public class PlayingFragment extends Fragment {
 
     private ImageButton pauseButton;
 
-    private TextView titleView;
+    private TextView titleView,artistView,albumView;
 
     private ImageView artworkView;
 
     private MediaPlayer mediaPlayer;
-
-    private static Handler handler = new Handler();
-
-    private Runnable updataText;
 
     private static PlayingFragment playingFragment;
 
@@ -98,7 +93,11 @@ public class PlayingFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        titleView = (TextView) view.findViewById(R.id.titleView);
+        titleView = (TextView) view.findViewById(R.id.title_view);
+
+        artistView = (TextView) view.findViewById(R.id.artist_view);
+
+        albumView = (TextView) view.findViewById(R.id.album_view);
 
         artworkView = (ImageView) view.findViewById(R.id.artwark_view);
 
@@ -166,41 +165,14 @@ public class PlayingFragment extends Fragment {
         if (song.mTitle != null) {
             titleView.setText(song.mTitle);
         }
-        textPosition= 1;
 
-        updataText = new Runnable() {
-            @Override
-            public void run() {
-                SongObject song = songObjectList.get(position);
-                if (textPosition == 0) {
-                    if (song.mTitle != null) {
-                        titleView.setText(song.mTitle);
-                    }else{
-                        titleView.setText("名称不明");
-                    }
-                    textPosition = 1;
-                }else if(textPosition == 1){
-                    if(song.mArtist != null){
-                        titleView.setText((song.mArtist));
-                    }else{
-                        titleView.setText("アーティスト不明");
-                    }
-                    textPosition = 2;
-                }else if(textPosition == 2){
-                    if(song.mAlbum != null){
-                        titleView.setText(song.mAlbum);
-                    }else{
-                        titleView.setText("アルバム不明");
-                    }
-                    textPosition = 0;
-                }
-                handler.removeCallbacks(updataText);
-                handler.postDelayed(updataText,3000);
-            }
-        };
+        if(song.mArtist != null){
+            artistView.setText((song.mArtist));
+        }
 
-        handler.postDelayed(updataText,3000);
-
+        if(song.mAlbum != null){
+            albumView.setText(song.mAlbum);
+        }
         mediaPlayer.reset();
 
         if (!started) {
