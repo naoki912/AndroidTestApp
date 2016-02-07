@@ -68,7 +68,7 @@ public class CloudFragment extends Fragment {
             }
         });
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_cloud_layout);
+/*        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_cloud_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -82,7 +82,7 @@ public class CloudFragment extends Fragment {
                     }
                 }, 3000);
             }
-        });
+        });*/
 
 //        mAdapter.add("a");
     }
