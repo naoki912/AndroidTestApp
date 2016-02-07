@@ -7,7 +7,7 @@ import android.provider.MediaStore;
 
 import java.io.Serializable;
 
-public class SongObject implements Serializable {
+public class SongObject{
     private static final long serialVersionUID = 1672684457497809250L;
 
     public static final String[] COLUMNS = {
