@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import wcdi.common.widget.GenericArrayAdapter;
 import wcdi.wcdiplayer.Items.SongObject;
@@ -37,12 +38,12 @@ public class SongViewAdapter extends GenericArrayAdapter<SongObject> {
         int minute = time / 60;
         ((TextView) view.findViewById(R.id.song_time)).setText(minute + ":" + second);
 
-        try {
-            File path = new File(getItem(position).mAlbumArt);
+        File path = new File(getItem(position).mAlbumArt);
+        if (path.exists()) {
             Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
             ((ImageView) view.findViewById(R.id.song_image))
                     .setImageBitmap(bitmap);
-        } catch (NullPointerException e) {
+        } else {
             ((ImageView) view.findViewById(R.id.song_image))
                     .setImageResource(R.drawable.default_album_art);
         }
