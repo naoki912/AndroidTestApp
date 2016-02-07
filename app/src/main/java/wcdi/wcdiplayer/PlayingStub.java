@@ -12,19 +12,19 @@ import java.util.ArrayList;
 
 import wcdi.wcdiplayer.Items.SongObject;
 
-public class PlayingStab extends Fragment {
+public class PlayingStub extends Fragment {
     private static final String MEDIAPATHLIST = "mediapathlist";
     private static final String POSITION = "position";
     private static final String ALBUM_ART = "album_art";
 
-    private static PlayingStab playingStab;
+    private static PlayingStub playingStub;
     private MediaPlayer mediaPlayer;
     
-    public static PlayingStab newInstance(ArrayList<SongObject> mSongObjectList, int position) {
+    public static PlayingStub newInstance(ArrayList<SongObject> mSongObjectList, int position) {
 
-        if (playingStab == null) {
+        if (playingStub == null) {
 
-            playingStab = new PlayingStab();
+            playingStub = new PlayingStub();
 
             Bundle bundle = new Bundle();
 
@@ -38,10 +38,10 @@ public class PlayingStab extends Fragment {
 
             bundle.putString(ALBUM_ART, mSongObjectList.get(position).mAlbumArt);
 
-            playingStab.setArguments(bundle);
+            playingStub.setArguments(bundle);
         }
 
-        return playingStab;
+        return playingStub;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PlayingStab extends Fragment {
         startMusic();
     }
 
-    private PlayingStab(){}
+    private PlayingStub(){}
 
     private void startMusic() {
         mediaPlayer = MediaPlayer.create(

@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, PlayingFragment.newInstance(mSongObjectList, position))
-//                .replace(R.id.fragment, PlayingStab.newInstance(mSongObjectList, position))
+//                .replace(R.id.fragment, PlayingStub.newInstance(mSongObjectList, position))
                 .addToBackStack(null)
                 .commit();
     }
