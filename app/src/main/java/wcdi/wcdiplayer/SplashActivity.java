@@ -18,7 +18,7 @@ public class SplashActivity extends Activity {
 
         Handler handler = new Handler();
 
-        handler.postDelayed(new spashHandler(), 500);
+        handler.postDelayed(new spashHandler(), 2000);
     }
 
     class spashHandler implements Runnable {
