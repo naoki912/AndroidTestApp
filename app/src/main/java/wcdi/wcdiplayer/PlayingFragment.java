@@ -30,7 +30,9 @@ public class PlayingFragment extends Fragment {
 
     private static int position;
 
-    private ArrayList<SongObject> songObjectList;
+    private static boolean started = false;
+
+    private  ArrayList<SongObject> songObjectList;
 
     private ImageButton pauseButton;
 
@@ -47,7 +49,8 @@ public class PlayingFragment extends Fragment {
         if (mPlayingFragment == null) {
             mPlayingFragment = new PlayingFragment();
         }else if(mPlayingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath)){
-            return null;
+            started = true;
+            return mPlayingFragment;
         }else{
             mPlayingFragment.mediaPlayer.stop();
             mPlayingFragment.mediaPlayer.release();
@@ -60,11 +63,6 @@ public class PlayingFragment extends Fragment {
     }
 
     public static PlayingFragment getInstance() {
-
-//        if (mPlayingFragment == null) {
-//            newInstance(new ArrayList<String>(), 0);
-//        }
-
         return mPlayingFragment;
     }
 
@@ -156,24 +154,27 @@ public class PlayingFragment extends Fragment {
 
         Log.d("path", song.mPath);
 
-        try {
-            mediaPlayer.setDataSource(song.mPath);
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                position = (position + 1) % songObjectList.size();
-
-                startMusic();
+        if (!started) {
+            try {
+                mediaPlayer.setDataSource(song.mPath);
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-        mediaPlayer.start();
 
-        Log.d("Debug: ", position + songObjectList.get(position).mTitle);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    position = (position + 1) % songObjectList.size();
+
+                    startMusic();
+                }
+            });
+            mediaPlayer.start();
+
+            Log.d("Debug: ", position + songObjectList.get(position).mTitle);
+        }
+        started = false;
     }
 
     public String getPath(){
