@@ -48,7 +48,7 @@ public class PlayingFragment extends Fragment {
 
         if (mPlayingFragment == null) {
             mPlayingFragment = new PlayingFragment();
-        }else if(mPlayingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath)){
+        }else if(mPlayingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath) && mPlayingFragment.mediaPlayer.isPlaying()){
             started = true;
             return mPlayingFragment;
         }else{
