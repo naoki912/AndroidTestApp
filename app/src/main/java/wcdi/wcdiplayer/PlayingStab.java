@@ -10,20 +10,37 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import wcdi.wcdiplayer.Items.SongObject;
+
 public class PlayingStab extends Fragment {
     private static final String MEDIAPATHLIST = "mediapathlist";
     private static final String POSITION = "position";
+    private static final String ALBUM_ART = "album_art";
+
     private static PlayingStab playingStab;
     private MediaPlayer mediaPlayer;
     
-    public static PlayingStab newInstance(ArrayList<String> mediaPathList, int position) {
+    public static PlayingStab newInstance(ArrayList<SongObject> mSongObjectList, int position) {
+
         if (playingStab == null) {
+
             playingStab = new PlayingStab();
+
             Bundle bundle = new Bundle();
-            bundle.putStringArrayList(MEDIAPATHLIST, mediaPathList);
+
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (SongObject songObject : mSongObjectList) {
+                arrayList.add(songObject.mPath);
+            }
+            bundle.putStringArrayList(MEDIAPATHLIST, arrayList);
+
             bundle.putInt(POSITION, position);
+
+            bundle.putString(ALBUM_ART, mSongObjectList.get(position).mAlbumArt);
+
             playingStab.setArguments(bundle);
         }
+
         return playingStab;
     }
 

@@ -2,10 +2,7 @@ package wcdi.wcdiplayer;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.provider.MediaStore;
@@ -14,9 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -36,7 +31,7 @@ public class SongFragment extends ListFragment {
 
     private OnSongClickListener mListener;
 
-    private ArrayList<String> mSongPathList;
+    private ArrayList<SongObject> mSongObjectList;
 
     public static SongFragment newInstance(AlbumObject albumObject) {
         SongFragment fragment = new SongFragment();
@@ -63,7 +58,7 @@ public class SongFragment extends ListFragment {
 
         mAdapter = new SongViewAdapter(getActivity(), R.layout.song_list_item);
 
-        mSongPathList = new ArrayList<>();
+        mSongObjectList = new ArrayList<>();
     }
 
     @Override
@@ -81,7 +76,7 @@ public class SongFragment extends ListFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mListener.onSongClick(mSongPathList, position);
+                mListener.onSongClick(mSongObjectList, position);
 
             }
         });
@@ -102,11 +97,12 @@ public class SongFragment extends ListFragment {
             do {
                 mAdapter.add(new SongObject(cursor, getArguments().getString(ALBUM_ART)));
 
-                mSongPathList.add(
-                        ContentUris.withAppendedId(
-                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
-                        ).toString()
+                mSongObjectList.add(
+//                        ContentUris.withAppendedId(
+//                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+//                                cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
+//                        ).toString()
+                        new SongObject(cursor, getArguments().getString(ALBUM_ART))
                 );
 
             } while (cursor.moveToNext());
@@ -140,7 +136,7 @@ public class SongFragment extends ListFragment {
     }
 
     public interface OnSongClickListener {
-        void onSongClick(ArrayList<String> mediaPathList, int position);
+        void onSongClick(ArrayList<SongObject> mSongObjectList, int position);
     }
 
 }

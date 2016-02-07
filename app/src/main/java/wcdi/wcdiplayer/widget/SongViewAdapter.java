@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import wcdi.common.widget.GenericArrayAdapter;
 import wcdi.wcdiplayer.Items.SongObject;

@@ -13,6 +13,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import wcdi.wcdiplayer.Items.SongObject;
+
 
 public class MainActivity extends AppCompatActivity
         implements SongFragment.OnSongClickListener {
@@ -56,7 +58,6 @@ public class MainActivity extends AppCompatActivity
                 } else if (id == R.id.nav_player) {
                     getFragmentManager()
                             .beginTransaction()
-//                            .replace(R.id.fragment, PlayingFragment.newInstance(new ArrayList<String>(), 0))
                             .replace(R.id.fragment, PlayingFragment.getInstance())
                             .addToBackStack(null)
                             .commit();
@@ -131,11 +132,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSongClick(ArrayList<String> mediaPathList, int position) {
+    public void onSongClick(ArrayList<SongObject> mSongObjectList, int position) {
         getFragmentManager()
                 .beginTransaction()
-//                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, position))
-                .replace(R.id.fragment, PlayingStab.newInstance(mediaPathList, position))
+                .replace(R.id.fragment, PlayingFragment.newInstance(mSongObjectList, position))
+//                .replace(R.id.fragment, PlayingStab.newInstance(mSongObjectList, position))
                 .addToBackStack(null)
                 .commit();
     }
