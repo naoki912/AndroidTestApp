@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.provider.MediaStore;
@@ -12,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -24,6 +28,8 @@ public class SongFragment extends ListFragment {
 
     private static final String ALBUM_ID = "album";
 
+    private static final String ALBUM_ART = "album_art";
+
     private AbsListView mListView;
 
     private SongViewAdapter mAdapter;
@@ -32,12 +38,13 @@ public class SongFragment extends ListFragment {
 
     private ArrayList<String> mSongPathList;
 
-    public static SongFragment newInstance(AlbumObject s) {
+    public static SongFragment newInstance(AlbumObject albumObject) {
         SongFragment fragment = new SongFragment();
 
         Bundle args = new Bundle();
 
-        args.putString(ALBUM_ID, String.valueOf(s.mId));
+        args.putString(ALBUM_ID, String.valueOf(albumObject.mId));
+        args.putString(ALBUM_ART, String.valueOf(albumObject.mAlbumArt));
 
         fragment.setArguments(args);
 
@@ -93,7 +100,7 @@ public class SongFragment extends ListFragment {
 
         if (mListView.getCount() == 0) {
             do {
-                mAdapter.add(new SongObject(cursor));
+                mAdapter.add(new SongObject(cursor, getArguments().getString(ALBUM_ART)));
 
                 mSongPathList.add(
                         ContentUris.withAppendedId(
@@ -111,6 +118,7 @@ public class SongFragment extends ListFragment {
                 return lhs.mTrack - rhs.mTrack;
             }
         });
+
     }
 
     @Override

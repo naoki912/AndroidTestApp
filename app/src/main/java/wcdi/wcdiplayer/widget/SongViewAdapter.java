@@ -1,9 +1,14 @@
 package wcdi.wcdiplayer.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
 
 import wcdi.common.widget.GenericArrayAdapter;
 import wcdi.wcdiplayer.Items.SongObject;
@@ -31,6 +36,16 @@ public class SongViewAdapter extends GenericArrayAdapter<SongObject> {
         int second = time % 60;
         int minute = time / 60;
         ((TextView) view.findViewById(R.id.song_time)).setText(minute + ":" + second);
+
+        try {
+            File path = new File(getItem(position).mAlbumArt);
+            Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
+            ((ImageView) view.findViewById(R.id.song_image))
+                    .setImageBitmap(bitmap);
+        } catch (NullPointerException e) {
+            ((ImageView) view.findViewById(R.id.song_image))
+                    .setImageResource(R.drawable.default_album_art);
+        }
 
         return view;
     }

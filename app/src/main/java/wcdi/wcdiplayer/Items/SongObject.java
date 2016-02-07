@@ -26,6 +26,8 @@ public class SongObject {
     public long mDuration; //再生時間
     public int mTrack;
 
+    public String mAlbumArt;
+
     public  SongObject(Cursor cursor) {
         mId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
         mPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
@@ -35,5 +37,18 @@ public class SongObject {
         uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mId);
         mDuration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)); //再生時間
         mTrack = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
+        mAlbumArt = null;
+    }
+
+    public  SongObject(Cursor cursor, String albumArt) {
+        mId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+        mPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+        mTitle = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+        mAlbum = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+        mArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+        uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mId);
+        mDuration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)); //再生時間
+        mTrack = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK));
+        mAlbumArt = albumArt;
     }
 }
