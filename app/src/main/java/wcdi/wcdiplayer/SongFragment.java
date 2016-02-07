@@ -14,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import wcdi.wcdiplayer.Items.AlbumObject;
 import wcdi.wcdiplayer.Items.SongObject;
@@ -103,6 +104,13 @@ public class SongFragment extends ListFragment {
 
             } while (cursor.moveToNext());
         }
+
+        mAdapter.sort(new Comparator<SongObject>() {
+            @Override
+            public int compare(SongObject lhs, SongObject rhs) {
+                return lhs.mTrack - rhs.mTrack;
+            }
+        });
     }
 
     @Override
