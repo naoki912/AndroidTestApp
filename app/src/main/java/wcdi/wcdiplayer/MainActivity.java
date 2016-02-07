@@ -11,12 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity
-        implements DirectoryFragment.OnFileClickListener, SongFragment.OnSongClickListener {
+        implements SongFragment.OnSongClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +47,6 @@ public class MainActivity extends AppCompatActivity
                 } else if (id == R.id.nav_manage) {
                 } else if (id == R.id.nav_share) {
                 } else if (id == R.id.nav_send) {
-                } else if (id == R.id.nav_directory) {
-                    getFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment, DirectoryFragment.newInstance(new File("/")))
-                            .addToBackStack(null)
-                            .commit();
                 } else if (id == R.id.nav_cloud) {
                     getFragmentManager()
                             .beginTransaction()
@@ -135,24 +128,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDirectoryClick(File path) {
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment, DirectoryFragment.newInstance(path))
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
-    public void onFileClick(ArrayList<String> mediaPathList, int position) {
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment, PlayingFragment.newInstance(mediaPathList, position))
-                .addToBackStack(null)
-                .commit();
     }
 
     @Override
