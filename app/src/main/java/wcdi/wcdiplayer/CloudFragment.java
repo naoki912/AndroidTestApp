@@ -52,7 +52,7 @@ public class CloudFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cloud_list, container, false);
+        return inflater.inflate(R.layout.fragment_album, container, false);
     }
 
     @Override
