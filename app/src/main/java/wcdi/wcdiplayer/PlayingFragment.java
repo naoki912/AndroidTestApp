@@ -38,6 +38,7 @@ public class PlayingFragment extends Fragment {
 
     private static PlayingFragment mPlayingFragment;
 
+    // ViewをSingletonにするのはあまりよろしくないけれど音楽再生部分を兼ねているのでServiceと分離するまでSingletonのままで
     public static PlayingFragment newInstance(ArrayList<String> mediaPathList, int point) {
 
         if (mPlayingFragment == null) {
