@@ -24,9 +24,9 @@ public class AlbumFragment extends Fragment {
     public static AlbumFragment newInstance() {
         AlbumFragment fragment = new AlbumFragment();
 
-        Bundle args = new Bundle();
+//        Bundle args = new Bundle();
 
-        fragment.setArguments(args);
+//        fragment.setArguments(args);
 
         return fragment;
     }
