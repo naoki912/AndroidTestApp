@@ -31,11 +31,17 @@ public class SongViewAdapter extends GenericArrayAdapter<SongObject> {
         String string = String.valueOf(aLong.longValue() % 100);
         ((TextView) view.findViewById(R.id.song_number)).setText(string);
 
-        // 汚いのでもっとマシな方法を探す
-        int time = (int) getItem(position).mDuration / 1000;
-        int second = time % 60;
-        int minute = time / 60;
-        ((TextView) view.findViewById(R.id.song_time)).setText(minute + ":" + second);
+        // もう少しきれいに書ける気がする
+        Integer time = (int) getItem(position).mDuration / 1000;
+        Integer minute = time / 60;
+        Integer second = time % 60;
+        if (second < 10) {
+            ((TextView) view.findViewById(R.id.song_time))
+                    .setText(minute.toString() + ":0" + second.toString());
+        } else {
+            ((TextView) view.findViewById(R.id.song_time))
+                    .setText(minute.toString() + ":" + second.toString());
+        }
 
         File path = new File(getItem(position).mAlbumArt);
         if (path.exists()) {
