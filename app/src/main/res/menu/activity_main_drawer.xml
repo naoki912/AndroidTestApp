@@ -17,6 +17,12 @@
                 <item
                     android:id="@+id/nav_cloud"
                     android:title="Cloud" />
+                <item
+                    android:id="@+id/nav_album"
+                    android:title="Albums" />
+                <item
+                    android:id="@+id/nav_Artists"
+                    android:title="Artists" />
             </group>
         </menu>
     </item>

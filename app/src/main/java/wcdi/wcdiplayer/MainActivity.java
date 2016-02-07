@@ -49,16 +49,28 @@ public class MainActivity extends AppCompatActivity
                 } else if (id == R.id.nav_manage) {
                 } else if (id == R.id.nav_share) {
                 } else if (id == R.id.nav_send) {
+                } else if (id == R.id.nav_player) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, PlayingFragment.getInstance())
+                            .addToBackStack(null)
+                            .commit();
                 } else if (id == R.id.nav_cloud) {
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, CloudFragment.newInstance(""))
                             .addToBackStack(null)
                             .commit();
-                } else if (id == R.id.nav_player) {
+                } else if (id == R.id.nav_album) {
                     getFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment, PlayingFragment.getInstance())
+                            .replace(R.id.fragment, AlbumFragment.newInstance())
+                            .addToBackStack(null)
+                            .commit();
+                } else if (id == R.id.nav_Artists) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, ArtistFragment.newInstance())
                             .addToBackStack(null)
                             .commit();
                 }

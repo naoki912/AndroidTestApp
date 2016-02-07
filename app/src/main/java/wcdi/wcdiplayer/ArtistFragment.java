@@ -1,9 +1,9 @@
 package wcdi.wcdiplayer;
 
+import android.app.Fragment;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +13,18 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
-import wcdi.wcdiplayer.Items.AlbumObject;
+import wcdi.wcdiplayer.Items.ArtistObject;
 import wcdi.wcdiplayer.Items.SongObject;
-import wcdi.wcdiplayer.widget.AlbumViewAdapter;
+import wcdi.wcdiplayer.widget.ArtistViewAdapter;
 
+public class ArtistFragment extends Fragment {
 
-public class AlbumFragment extends Fragment {
-
-    private AlbumViewAdapter mAdapter;
+    private ArtistViewAdapter mAdapter;
 
     private AbsListView mListView;
 
-    public static AlbumFragment newInstance() {
-        AlbumFragment fragment = new AlbumFragment();
+    public static ArtistFragment newInstance() {
+        ArtistFragment fragment = new ArtistFragment();
 
         return fragment;
     }
@@ -38,7 +37,7 @@ public class AlbumFragment extends Fragment {
 
         }
 
-        mAdapter = new AlbumViewAdapter(getActivity(), R.layout.album_list_item);
+        mAdapter = new ArtistViewAdapter(getActivity(), R.layout.album_list_item);
 
     }
 
@@ -62,9 +61,9 @@ public class AlbumFragment extends Fragment {
 
                 Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         SongObject.COLUMNS,
-                        MediaStore.Audio.Media.ALBUM_ID + "=?",
+                        MediaStore.Audio.Media.ARTIST_ID + "=?",
                         new String[] {
-                                String.valueOf(((AlbumObject) parent.getAdapter().getItem(position)).mId)
+                                String.valueOf(((ArtistObject) parent.getAdapter().getItem(position)).mId)
                         },
                         null);
 
@@ -73,7 +72,7 @@ public class AlbumFragment extends Fragment {
                 ArrayList<SongObject> songObjects = new ArrayList<>();
 
                 do {
-                    songObjects.add(new SongObject(cursor, mAdapter.getItem(position).mAlbumArt));
+                    songObjects.add(new SongObject(cursor));
                 } while (cursor.moveToNext());
 
                 getFragmentManager()
@@ -87,16 +86,17 @@ public class AlbumFragment extends Fragment {
 
         ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
 
-        Cursor cursor = contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                AlbumObject.COLUMNS, null, null, null);
+        Cursor cursor = contentResolver.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
+                ArtistObject.COLUMNS, null, null, null);
 
         cursor.moveToFirst();
 
         if (mListView.getCount() == 0) {
             do {
-                mAdapter.add(new AlbumObject(cursor));
+                mAdapter.add(new ArtistObject(cursor));
             } while (cursor.moveToNext());
         }
     }
 
 }
+
