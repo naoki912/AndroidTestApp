@@ -187,6 +187,8 @@ public class PlayingFragment extends Fragment {
             });
             mediaPlayer.start();
 
+            mListener.onChangeSong(songObjectList.get(position));
+
             Log.d("Debug: ", position + songObjectList.get(position).mTitle);
         }
         started = false;

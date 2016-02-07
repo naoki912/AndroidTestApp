@@ -23,14 +23,16 @@
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Title"
-            android:id="@+id/under_controls_title" />
+            android:id="@+id/under_controls_title"
+            android:singleLine="true" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Artist"
             android:id="@+id/under_controls_artist"
-            android:layout_weight="0" />
+            android:layout_weight="0"
+            android:singleLine="true" />
 
     </LinearLayout>
 
