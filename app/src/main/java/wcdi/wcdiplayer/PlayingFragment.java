@@ -1,5 +1,6 @@
 package wcdi.wcdiplayer;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -43,6 +44,8 @@ public class PlayingFragment extends Fragment {
     private MediaPlayer mediaPlayer;
 
     private static PlayingFragment mPlayingFragment;
+
+    private OnPlayingFragmentListener mListener;
 
     public static PlayingFragment newInstance(ArrayList<SongObject> mSongObjectList, int point) {
 
@@ -130,6 +133,18 @@ public class PlayingFragment extends Fragment {
         startMusic();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mListener = (OnPlayingFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnSongClickListener");
+        }
+
+    }
+
     public void startMusic() {
         SongObject song = songObjectList.get(position);
 
@@ -179,5 +194,9 @@ public class PlayingFragment extends Fragment {
 
     public String getPath(){
         return songObjectList.get(position).mPath;
+    }
+
+    public interface OnPlayingFragmentListener {
+        void onChangeSong(SongObject songObject);
     }
 }

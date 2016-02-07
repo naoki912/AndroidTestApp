@@ -17,7 +17,7 @@ import wcdi.wcdiplayer.Items.SongObject;
 
 
 public class MainActivity extends AppCompatActivity
-        implements SongFragment.OnSongClickListener {
+        implements SongFragment.OnSongClickListener, PlayingFragment.OnPlayingFragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,5 +136,10 @@ public class MainActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
                 .commit();
+    }
+
+    @Override
+    public void onChangeSong(SongObject songObject) {
+
     }
 }
