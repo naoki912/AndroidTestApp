@@ -121,7 +121,6 @@ public class PlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 position = (position > 0 ? position : songObjectList.size()) - 1;
-                mListener.onChangeSong(songObjectList.get(position));
                 startMusic();
             }
         });
@@ -130,7 +129,6 @@ public class PlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 position = (position + 1) % songObjectList.size();
-                mListener.onChangeSong(songObjectList.get(position));
                 startMusic();
             }
         });
@@ -217,7 +215,6 @@ public class PlayingFragment extends Fragment {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     position = (position + 1) % songObjectList.size();
-                    mListener.onChangeSong(songObjectList.get(position));
                     startMusic();
                 }
             });
