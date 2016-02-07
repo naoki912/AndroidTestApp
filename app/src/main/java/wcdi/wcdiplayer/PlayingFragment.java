@@ -106,8 +106,10 @@ public class PlayingFragment extends Fragment {
             public void onClick(View view) {
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
+                    pauseButton.setImageResource(R.drawable.start);
                 } else {
                     mediaPlayer.start();
+                    pauseButton.setImageResource(R.drawable.pause);
                 }
             }
         });
@@ -152,11 +154,9 @@ public class PlayingFragment extends Fragment {
             File path = new File(song.mAlbumArt);
             if (path.exists()) {
                 Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
-                ((ImageView) artworkView.findViewById(R.id.artwark_view))
-                        .setImageBitmap(bitmap);
+                artworkView.setImageBitmap(bitmap);
             } else {
-                ((ImageView) artworkView.findViewById(R.id.artwark_view))
-                        .setImageResource(R.drawable.default_album_art);
+                artworkView.setImageResource(R.drawable.default_album_art);
             }
 
         }
