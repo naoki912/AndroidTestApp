@@ -30,12 +30,17 @@ public class AlbumViewAdapter extends GenericArrayAdapter<AlbumObject> {
         ((TextView) view.findViewById(R.id.album_artist))
                 .setText(getItem(position).mArtist);
 
-        File path = new File(getItem(position).mAlbumArt);
-        if (path.exists()) {
+        // SongViewAdapter側ではif判定させたがAlbumViewAdapter側では上手く行かなかったのでtrycatchに戻した
+        // 要検証
+        try {
+            File path = new File(getItem(position).mAlbumArt);
             Bitmap bitmap = new BitmapFactory().decodeFile(path.getAbsolutePath());
             ((ImageView) view.findViewById(R.id.album_image))
                     .setImageBitmap(bitmap);
-        } else {
+        } catch (NullPointerException e) {
+            // アルバムアートが定義されていない場合はぬるぽになる
+            // 新しく設定しなおしてあげないと、viewの再利用時に前回のジャケットが残ってしまう？
+            // 要検証
             ((ImageView) view.findViewById(R.id.album_image))
                     .setImageResource(R.drawable.default_album_art);
         }
