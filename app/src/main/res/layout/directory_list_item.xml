@@ -8,7 +8,7 @@
         android:layout_width="86dp"
         android:layout_height="86dp"
         android:id="@+id/albumImageView"
-        android:src="@drawable/albumdefault" />
+        android:src="@drawable/default_album_art" />
 
     <TextView
         android:layout_width="match_parent"

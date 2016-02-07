@@ -15,26 +15,28 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
-import wcdi.wcdiplayer.widget.SongArrayAdapter;
+import wcdi.wcdiplayer.Items.AlbumObject;
+import wcdi.wcdiplayer.Items.SongObject;
+import wcdi.wcdiplayer.widget.SongViewAdapter;
 
 public class SongFragment extends ListFragment {
 
-    private static final String ALBUM = "album";
+    private static final String ALBUM_ID = "album";
 
     private AbsListView mListView;
 
-    private SongArrayAdapter mAdapter;
+    private SongViewAdapter mAdapter;
 
     private OnSongClickListener mListener;
 
     private ArrayList<String> mSongPathList;
 
-    public static SongFragment newInstance(String s) {
+    public static SongFragment newInstance(AlbumObject s) {
         SongFragment fragment = new SongFragment();
 
         Bundle args = new Bundle();
 
-        args.putString(ALBUM, s);
+        args.putString(ALBUM_ID, String.valueOf(s.mId));
 
         fragment.setArguments(args);
 
@@ -51,7 +53,7 @@ public class SongFragment extends ListFragment {
         if (getArguments() != null) {
         }
 
-        mAdapter = new SongArrayAdapter(getActivity(), R.layout.song_list_item);
+        mAdapter = new SongViewAdapter(getActivity(), R.layout.song_list_item);
 
         mSongPathList = new ArrayList<>();
     }
@@ -79,17 +81,10 @@ public class SongFragment extends ListFragment {
         ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
 
         Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                new String[]{
-                        MediaStore.Audio.Media._ID,
-                        MediaStore.Audio.Media.ARTIST,
-                        MediaStore.Audio.Media.ALBUM,
-                        MediaStore.Audio.Media.DURATION,
-                        MediaStore.Audio.Media.TRACK,
-                        MediaStore.Audio.Media.TITLE,
-                },
-                MediaStore.Audio.Media.ALBUM + "=?",
+                SongObject.COLUMNS,
+                MediaStore.Audio.Media.ALBUM_ID + "=?",
                 new String[] {
-                        getArguments().getString(ALBUM)
+                        getArguments().getString(ALBUM_ID)
                 },
                 null);
 
@@ -97,7 +92,7 @@ public class SongFragment extends ListFragment {
 
         if (mListView.getCount() == 0) {
             do {
-                mAdapter.add(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                mAdapter.add(new SongObject(cursor));
 
                 mSongPathList.add(
                         ContentUris.withAppendedId(

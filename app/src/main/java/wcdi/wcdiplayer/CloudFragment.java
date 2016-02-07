@@ -64,7 +64,7 @@ public class CloudFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mAdapter.add("a");
+//                mAdapter.add("a");
             }
         });
 
@@ -84,7 +84,7 @@ public class CloudFragment extends Fragment {
             }
         });
 
-        mAdapter.add("a");
+//        mAdapter.add("a");
     }
 
 }

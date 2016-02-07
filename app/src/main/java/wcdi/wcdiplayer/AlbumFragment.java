@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import wcdi.wcdiplayer.Items.AlbumObject;
 import wcdi.wcdiplayer.widget.AlbumViewAdapter;
 
 
@@ -61,7 +62,7 @@ public class AlbumFragment extends Fragment {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment, SongFragment.newInstance(
-                                parent.getAdapter().getItem(position).toString()))
+                                (AlbumObject) parent.getAdapter().getItem(position)))
                         .addToBackStack(null)
                         .commit();
 
@@ -71,17 +72,13 @@ public class AlbumFragment extends Fragment {
         ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
 
         Cursor cursor = contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                new String[]{
-                        MediaStore.Audio.Albums._ID,
-                        MediaStore.Audio.Albums.ARTIST,
-                        MediaStore.Audio.Albums.ALBUM
-                }, null, null, null);
+                AlbumObject.COLUMNS, null, null, null);
 
         cursor.moveToFirst();
 
         if (mListView.getCount() == 0) {
             do {
-                mAdapter.add(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM)));
+                mAdapter.add(new AlbumObject(cursor));
             } while (cursor.moveToNext());
         }
     }
