@@ -28,7 +28,7 @@ public class PlayingFragment extends Fragment {
 
     private static String ARGUMENT2 = "song_object_list";
 
-    private int position;
+    private static int position;
 
     private ArrayList<SongObject> songObjectList;
 
@@ -42,21 +42,20 @@ public class PlayingFragment extends Fragment {
 
     private static PlayingFragment mPlayingFragment;
 
-    public static PlayingFragment newInstance(ArrayList<SongObject> songObjectList, int point) {
+    public static PlayingFragment newInstance(ArrayList<SongObject> mSongObjectList, int point) {
 
-        if (mPlayingFragment == getInstance()) {
-
+        if (mPlayingFragment == null) {
             mPlayingFragment = new PlayingFragment();
-
-            Bundle args = new Bundle();
-            args.putInt(ARGUMENT1, point);
-            args.putSerializable(ARGUMENT2, songObjectList);
-
-            mPlayingFragment.setArguments(args);
-
-            return mPlayingFragment;
+        }else if(mPlayingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath)){
+            return null;
+        }else{
+            mPlayingFragment.mediaPlayer.stop();
+            mPlayingFragment.mediaPlayer.release();
         }
-
+        Bundle args = new Bundle();
+        args.putInt(ARGUMENT1, point);
+        args.putSerializable(ARGUMENT2, mSongObjectList);
+        mPlayingFragment.setArguments(args);
         return mPlayingFragment;
     }
 
@@ -155,7 +154,7 @@ public class PlayingFragment extends Fragment {
 
         mediaPlayer.reset();
 
-        Log.d("path",song.mPath);
+        Log.d("path", song.mPath);
 
         try {
             mediaPlayer.setDataSource(song.mPath);
@@ -175,5 +174,9 @@ public class PlayingFragment extends Fragment {
         mediaPlayer.start();
 
         Log.d("Debug: ", position + songObjectList.get(position).mTitle);
+    }
+
+    public String getPath(){
+        return songObjectList.get(position).mPath;
     }
 }
