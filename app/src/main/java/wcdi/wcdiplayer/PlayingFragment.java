@@ -3,10 +3,10 @@ package wcdi.wcdiplayer;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +19,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.io.Serializable;
 
 import wcdi.wcdiplayer.Items.SongObject;
 
@@ -29,7 +28,7 @@ public class PlayingFragment extends Fragment {
 
     private static String ARGUMENT2 = "song_object_list";
 
-    private static int position;
+    private static int position, textPosition;
 
     private static boolean started = false;
 
@@ -43,30 +42,34 @@ public class PlayingFragment extends Fragment {
 
     private MediaPlayer mediaPlayer;
 
-    private static PlayingFragment mPlayingFragment;
+    private static Handler handler = new Handler();
+
+    private Runnable updataText;
+
+    private static PlayingFragment playingFragment;
 
     private OnPlayingFragmentListener mListener;
 
     public static PlayingFragment newInstance(ArrayList<SongObject> mSongObjectList, int point) {
 
-        if (mPlayingFragment == null) {
-            mPlayingFragment = new PlayingFragment();
-        }else if(mPlayingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath) && mPlayingFragment.mediaPlayer.isPlaying()){
+        if (playingFragment == null) {
+            playingFragment = new PlayingFragment();
+        }else if(playingFragment.songObjectList.get(position).mPath.equals(mSongObjectList.get(point).mPath) && playingFragment.mediaPlayer.isPlaying()){
             started = true;
-            return mPlayingFragment;
+            return playingFragment;
         }else{
-            mPlayingFragment.mediaPlayer.stop();
-            mPlayingFragment.mediaPlayer.release();
+            playingFragment.mediaPlayer.stop();
+            playingFragment.mediaPlayer.release();
         }
         Bundle args = new Bundle();
         args.putInt(ARGUMENT1, point);
         args.putSerializable(ARGUMENT2, mSongObjectList);
-        mPlayingFragment.setArguments(args);
-        return mPlayingFragment;
+        playingFragment.setArguments(args);
+        return playingFragment;
     }
 
     public static PlayingFragment getInstance() {
-        return mPlayingFragment;
+        return playingFragment;
     }
 
     private PlayingFragment(){}
@@ -118,7 +121,7 @@ public class PlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 position = (position > 0 ? position : songObjectList.size()) - 1;
-
+                mListener.onChangeSong(songObjectList.get(position));
                 startMusic();
             }
         });
@@ -127,7 +130,7 @@ public class PlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 position = (position + 1) % songObjectList.size();
-
+                mListener.onChangeSong(songObjectList.get(position));
                 startMusic();
             }
         });
@@ -161,13 +164,46 @@ public class PlayingFragment extends Fragment {
 
         }
 
+
         if (song.mTitle != null) {
             titleView.setText(song.mTitle);
         }
+        textPosition= 1;
+
+        updataText = new Runnable() {
+            @Override
+            public void run() {
+                SongObject song = songObjectList.get(position);
+                if (textPosition == 0) {
+                    if (song.mTitle != null) {
+                        titleView.setText(song.mTitle);
+                    }else{
+                        titleView.setText("名称不明");
+                    }
+                    textPosition = 1;
+                }else if(textPosition == 1){
+                    if(song.mArtist != null){
+                        titleView.setText((song.mArtist));
+                    }else{
+                        titleView.setText("アーティスト不明");
+                    }
+                    textPosition = 2;
+                }else if(textPosition == 2){
+                    if(song.mAlbum != null){
+                        titleView.setText(song.mAlbum);
+                    }else{
+                        titleView.setText("アルバム不明");
+                    }
+                    textPosition = 0;
+                }
+                handler.removeCallbacks(updataText);
+                handler.postDelayed(updataText,3000);
+            }
+        };
+
+        handler.postDelayed(updataText,3000);
 
         mediaPlayer.reset();
-
-        Log.d("path", song.mPath);
 
         if (!started) {
             try {
@@ -181,7 +217,7 @@ public class PlayingFragment extends Fragment {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     position = (position + 1) % songObjectList.size();
-
+                    mListener.onChangeSong(songObjectList.get(position));
                     startMusic();
                 }
             });
