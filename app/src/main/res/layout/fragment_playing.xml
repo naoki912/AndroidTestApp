@@ -4,6 +4,20 @@
     android:layout_height="match_parent"
     tools:context="wcdi.wcdiplayer.PlayingFragment">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/artwark_view"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/default_album_art"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,19 +57,7 @@
             android:src="@drawable/next"/>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/relativeLayout"
-        android:layout_centerHorizontal="true">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/artwark_view"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@android:drawable/ic_search_category_default" />
 
     </RelativeLayout>
+
 </RelativeLayout>

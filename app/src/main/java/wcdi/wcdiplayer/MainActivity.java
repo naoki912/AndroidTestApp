@@ -87,6 +87,13 @@ public class MainActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.fragment, AlbumFragment.newInstance())
                 .commit();
+
+        // hideしているPlayingUnderControlsFragmentが殺された場合を考えるとこの実装方法はマズイかも
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
+                .hide(PlayingUnderControlsFragment.getInstance())
+                .commit();
     }
 
     @Override
@@ -134,12 +141,14 @@ public class MainActivity extends AppCompatActivity
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
+                .show(PlayingUnderControlsFragment.getInstance())
                 .commit();
     }
 
     @Override
     public void onChangeSong(SongObject songObject) {
+
+        PlayingUnderControlsFragment.getInstance().setSong(songObject);
 
     }
 }

@@ -1,6 +1,7 @@
 package wcdi.wcdiplayer;
 
 import android.app.Fragment;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
+import wcdi.wcdiplayer.Items.SongObject;
+
 
 public class PlayingUnderControlsFragment extends Fragment {
 
     private static PlayingUnderControlsFragment playingUnderControlsFragment;
 
-    private TextView mTextView;
+    private TextView mTitleView;
 
-    private ImageView mImageView;
+    private TextView mArtistView;
+
+    private ImageView mAlbumArtView;
 
     public static PlayingUnderControlsFragment getInstance() {
 
@@ -45,17 +52,26 @@ public class PlayingUnderControlsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        mTextView = (TextView) view.findViewById(R.id.under_controls_title);
+        mTitleView = (TextView) view.findViewById(R.id.under_controls_title);
 
-        mImageView = (ImageView) view.findViewById(R.id.under_controls_image);
+        mArtistView = (TextView) view.findViewById(R.id.under_controls_artist);
+
+        mAlbumArtView = (ImageView) view.findViewById(R.id.under_controls_image);
+
     }
 
-    public void setImage(String path) {
-        // 渡す画像形式
-        // mImageView.setimage
-    }
+    public void setSong(SongObject songObject) {
 
-    public void setTitle(String s) {
-        mTextView.setText(s);
+        mTitleView.setText(songObject.mTitle);
+
+        mArtistView.setText(songObject.mAlbum);
+
+        File path = new File(songObject.mAlbumArt);
+        if (path.exists()) {
+            mAlbumArtView.setImageBitmap(new BitmapFactory().decodeFile(path.getAbsolutePath()));
+        } else {
+            mAlbumArtView.setImageResource(R.drawable.default_album_art);
+        }
+
     }
 }

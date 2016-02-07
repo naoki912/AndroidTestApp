@@ -145,7 +145,7 @@ public class PlayingFragment extends Fragment {
         try {
             mListener = (OnPlayingFragmentListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnSongClickListener");
+            throw new ClassCastException(activity.toString() + " must implement OnPlayingFragmentListener");
         }
 
     }
@@ -222,6 +222,8 @@ public class PlayingFragment extends Fragment {
                 }
             });
             mediaPlayer.start();
+
+            mListener.onChangeSong(songObjectList.get(position));
 
             Log.d("Debug: ", position + songObjectList.get(position).mTitle);
         }
