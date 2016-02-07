@@ -69,14 +69,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // デモで表示させている
-        // 実際は、動画を再生するまで表示にしておく
-        // 動画を停止したらremoveする
-        getFragmentManager()
-                .beginTransaction()
-                .add(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
-                .commit();
-
         // 画面下のコントローラをタッチしたときのリスナを設定
         findViewById(R.id.controls_container)
                 .setOnClickListener(new View.OnClickListener() {
@@ -138,6 +130,11 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment, PlayingFragment.newInstance(mSongObjectList, position))
 //                .replace(R.id.fragment, PlayingStub.newInstance(mSongObjectList, position))
                 .addToBackStack(null)
+                .commit();
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
                 .commit();
     }
 }
