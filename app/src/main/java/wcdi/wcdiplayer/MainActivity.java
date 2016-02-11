@@ -44,25 +44,25 @@ public class MainActivity extends AppCompatActivity
                 int id = menuItem.getItemId();
 
                 if (id == R.id.nav_player) {
-                    getFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, PlayingFragment.getInstance())
                             .addToBackStack(null)
                             .commit();
                 } else if (id == R.id.nav_cloud) {
-                    getFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, CloudFragment.newInstance(""))
                             .addToBackStack(null)
                             .commit();
                 } else if (id == R.id.nav_album) {
-                    getFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, AlbumFragment.newInstance())
                             .addToBackStack(null)
                             .commit();
                 } else if (id == R.id.nav_Artists) {
-                    getFragmentManager()
+                    getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, ArtistFragment.newInstance())
                             .addToBackStack(null)
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getFragmentManager()
+                        getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.fragment, PlayingFragment.getInstance())
                                 .addToBackStack(null)
@@ -89,14 +89,14 @@ public class MainActivity extends AppCompatActivity
                 });
 
         // デフォルト画面
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, AlbumFragment.newInstance())
 //                .replace(R.id.fragment, StreamingTest.getInstance())
                 .commit();
 
         // hideしているPlayingUnderControlsFragmentが殺された場合を考えるとこの実装方法はマズイかも
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.controls_container, PlayingUnderControlsFragment.getInstance())
                 .hide(PlayingUnderControlsFragment.getInstance())
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getFragmentManager().getBackStackEntryCount() != 0) {
-                getFragmentManager().popBackStack();
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                getSupportFragmentManager().popBackStack();
             }
         }
     }
@@ -139,14 +139,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSongClick(ArrayList<SongObject> mSongObjectList, int position) {
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, PlayingFragment.newInstance(mSongObjectList, position))
 //                .replace(R.id.fragment, PlayingStub.newInstance(mSongObjectList, position))
                 .addToBackStack(null)
                 .commit();
 
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .show(PlayingUnderControlsFragment.getInstance())
                 .commit();

@@ -1,6 +1,6 @@
 package wcdi.wcdiplayer;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;

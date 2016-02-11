@@ -1,6 +1,6 @@
 package wcdi.wcdiplayer;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
