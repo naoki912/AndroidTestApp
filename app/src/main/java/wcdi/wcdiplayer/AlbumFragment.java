@@ -1,9 +1,9 @@
 package wcdi.wcdiplayer;
 
+import android.app.Fragment;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +22,10 @@ public class AlbumFragment extends Fragment {
 
     private AlbumViewAdapter mAdapter;
 
-    private AbsListView mListView;
-
     public static AlbumFragment newInstance() {
-        AlbumFragment fragment = new AlbumFragment();
 
-        return fragment;
+        return new AlbumFragment();
+
     }
 
     @Override
@@ -35,7 +33,6 @@ public class AlbumFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-
         }
 
         mAdapter = new AlbumViewAdapter(getActivity(), R.layout.album_list_item);
@@ -45,16 +42,22 @@ public class AlbumFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_album_list, container, false);
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
 
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        AbsListView mListView = (AbsListView) view.findViewById(android.R.id.list);
+
         mListView.setAdapter(mAdapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -63,17 +66,19 @@ public class AlbumFragment extends Fragment {
                 Cursor cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         SongObject.COLUMNS,
                         MediaStore.Audio.Media.ALBUM_ID + "=?",
-                        new String[] {
-                                String.valueOf(((AlbumObject) parent.getAdapter().getItem(position)).mId)
-                        },
+                        new String[]{
+                                String.valueOf(((AlbumObject) parent.getAdapter().getItem(position)).mId)},
                         null);
 
                 cursor.moveToFirst();
 
                 ArrayList<SongObject> songObjects = new ArrayList<>();
 
+                // do/whileとかダサい
                 do {
+
                     songObjects.add(new SongObject(cursor, mAdapter.getItem(position).mAlbumArt));
+
                 } while (cursor.moveToNext());
 
                 getFragmentManager()
@@ -83,6 +88,7 @@ public class AlbumFragment extends Fragment {
                         .commit();
 
             }
+
         });
 
         ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
@@ -93,10 +99,16 @@ public class AlbumFragment extends Fragment {
         cursor.moveToFirst();
 
         if (mListView.getCount() == 0) {
+
+            // do/whileとかダサい
             do {
+
                 mAdapter.add(new AlbumObject(cursor));
+
             } while (cursor.moveToNext());
+
         }
+
     }
 
 }
