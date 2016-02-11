@@ -66,8 +66,8 @@ public class PlayingUnderControlsFragment extends Fragment {
 
         mArtistView.setText(songObject.mAlbum);
 
-        File path = new File(songObject.mAlbumArt);
-        if (path.exists()) {
+        if (songObject.mAlbumArt != null) {
+            File path = new File(songObject.mAlbumArt);
             mAlbumArtView.setImageBitmap(new BitmapFactory().decodeFile(path.getAbsolutePath()));
         } else {
             mAlbumArtView.setImageResource(R.drawable.default_album_art);
