@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, AlbumFragment.newInstance())
+//                .replace(R.id.fragment, StreamingTest.getInstance())
                 .commit();
 
         // hideしているPlayingUnderControlsFragmentが殺された場合を考えるとこの実装方法はマズイかも

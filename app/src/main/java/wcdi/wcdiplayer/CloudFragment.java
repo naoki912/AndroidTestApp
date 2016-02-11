@@ -2,7 +2,6 @@ package wcdi.wcdiplayer;
 
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import wcdi.wcdiplayer.widget.AlbumViewAdapter;
 
 public class CloudFragment extends Fragment {
 
-    private static final String URL = "url";
+    private static final String EXTRA_STRING_URL = "url";
 
     private String mUrl;
 
@@ -30,7 +29,7 @@ public class CloudFragment extends Fragment {
 
         Bundle args = new Bundle();
 
-        args.putString(URL, url);
+        args.putString(EXTRA_STRING_URL, url);
 
         fragment.setArguments(args);
 
@@ -42,7 +41,7 @@ public class CloudFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
          if (getArguments() != null) {
-             mUrl = getArguments().getString(URL);
+             mUrl = getArguments().getString(EXTRA_STRING_URL);
          }
 
         mAdapter = new AlbumViewAdapter(getActivity(), R.layout.album_list_item);

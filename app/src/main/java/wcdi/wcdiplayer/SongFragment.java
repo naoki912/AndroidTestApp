@@ -17,7 +17,7 @@ import wcdi.wcdiplayer.widget.SongViewAdapter;
 
 public class SongFragment extends ListFragment {
 
-    private static final String SONG_OBJECTS = "song_objects";
+    private static final String EXTRA_SERIALIZABLE_SONG_OBJECTS = "song_objects";
 
     private AbsListView mListView;
 
@@ -32,7 +32,7 @@ public class SongFragment extends ListFragment {
 
         Bundle args = new Bundle();
 
-        args.putSerializable(SONG_OBJECTS, songObjects);
+        args.putSerializable(EXTRA_SERIALIZABLE_SONG_OBJECTS, songObjects);
 
         fragment.setArguments(args);
 
@@ -75,7 +75,7 @@ public class SongFragment extends ListFragment {
         });
 
         if (mListView.getCount() == 0) {
-            mAdapter.addAll((ArrayList<SongObject>) getArguments().getSerializable(SONG_OBJECTS));
+            mAdapter.addAll((ArrayList<SongObject>) getArguments().getSerializable(EXTRA_SERIALIZABLE_SONG_OBJECTS));
         }
 
         mAdapter.sort(new Comparator<SongObject>() {

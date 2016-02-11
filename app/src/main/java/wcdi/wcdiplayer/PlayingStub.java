@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import wcdi.wcdiplayer.Items.SongObject;
 
 public class PlayingStub extends Fragment {
-    private static final String MEDIAPATHLIST = "mediapathlist";
-    private static final String POSITION = "position";
-    private static final String ALBUM_ART = "album_art";
+    private static final String EXTRA_STRING_ARRAY_LIST_MEDIA_PATH_LIST = "mediapathlist";
+    private static final String EXTRA_INT_POSITION = "position";
+    private static final String EXTRA_STRING_ALBUM_ART = "album_art";
 
     private static PlayingStub playingStub;
     private MediaPlayer mediaPlayer;
@@ -32,11 +32,11 @@ public class PlayingStub extends Fragment {
             for (SongObject songObject : mSongObjectList) {
                 arrayList.add(songObject.mPath);
             }
-            bundle.putStringArrayList(MEDIAPATHLIST, arrayList);
+            bundle.putStringArrayList(EXTRA_STRING_ARRAY_LIST_MEDIA_PATH_LIST, arrayList);
 
-            bundle.putInt(POSITION, position);
+            bundle.putInt(EXTRA_INT_POSITION, position);
 
-            bundle.putString(ALBUM_ART, mSongObjectList.get(position).mAlbumArt);
+            bundle.putString(EXTRA_STRING_ALBUM_ART, mSongObjectList.get(position).mAlbumArt);
 
             playingStub.setArguments(bundle);
         }
@@ -61,7 +61,7 @@ public class PlayingStub extends Fragment {
     private void startMusic() {
         mediaPlayer = MediaPlayer.create(
                 getActivity(),
-                Uri.parse(getArguments().getStringArrayList(MEDIAPATHLIST).get(getArguments().getInt(POSITION)))
+                Uri.parse(getArguments().getStringArrayList(EXTRA_STRING_ARRAY_LIST_MEDIA_PATH_LIST).get(getArguments().getInt(EXTRA_INT_POSITION)))
         );
 
         mediaPlayer.start();
