@@ -19,13 +19,14 @@ public class SongFragment extends ListFragment {
 
     private static final String EXTRA_SERIALIZABLE_SONG_OBJECTS = "song_objects";
 
-    private AbsListView mListView;
-
     private SongViewAdapter mAdapter;
 
     private OnSongClickListener mListener;
 
     private ArrayList<SongObject> mSongObjectList;
+
+    public SongFragment() {
+    }
 
     public static SongFragment newInstance(ArrayList<SongObject> songObjects) {
         SongFragment fragment = new SongFragment();
@@ -37,9 +38,6 @@ public class SongFragment extends ListFragment {
         fragment.setArguments(args);
 
         return fragment;
-    }
-
-    public SongFragment() {
     }
 
     @Override
@@ -63,7 +61,7 @@ public class SongFragment extends ListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        AbsListView mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,12 +96,6 @@ public class SongFragment extends ListFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnSongClickListener");
         }
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
 
     }
 
